@@ -1,8 +1,10 @@
-package com.longhb.flickrhd;
+package com.longhb.flickrhd.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.longhb.flickrhd.R;
 
 public class MainActivity extends AppCompatActivity {
 
