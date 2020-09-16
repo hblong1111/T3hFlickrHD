@@ -2,6 +2,7 @@ package com.longhb.flickrhd.network;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.longhb.flickrhd.model.Image;
 
 import java.util.List;
 
@@ -201,6 +202,41 @@ public class GetImagesFavourite {
             @SerializedName("width_l")
             @Expose
             private Integer widthL;
+
+            public Image getImage() {
+                String url = null;
+                int h = 0, w = 0;
+                if (urlL != null && !urlL.isEmpty()) {
+                    url = urlL;
+                    h = heightL;
+                    w = widthL;
+                } else if (urlC != null && !urlC.isEmpty()) {
+                    url = urlC;
+                    h = heightC;
+                    w = widthC;
+                } else if (urlZ != null && !urlZ.isEmpty()) {
+                    url = urlZ;
+                    h = heightZ;
+                    w = widthZ;
+                } else if (urlN != null && !urlN.isEmpty()) {
+                    url = urlN;
+                    h = heightN;
+                    w = widthN;
+                } else if (urlM != null && !urlM.isEmpty()) {
+                    url = urlM;
+                    h = heightM;
+                    w = widthM;
+                } else if (urlQ != null && !urlQ.isEmpty()) {
+                    url = urlQ;
+                    h = heightQ;
+                    w = widthQ;
+                } else if (urlS != null && !urlS.isEmpty()) {
+                    url = urlS;
+                    h = heightS;
+                    w = widthS;
+                }
+                return new Image(h, w, url, getViews());
+            }
 
             public String getId() {
                 return id;
