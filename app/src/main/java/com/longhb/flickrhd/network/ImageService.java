@@ -1,10 +1,12 @@
 package com.longhb.flickrhd.network;
 
 import retrofit2.Call;
+import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface ImageService {
 
+    @GET("services/rest")
     Call<GetImagesFavourite> getAllImageFavourite(
             @Query("method") String method,
             @Query("api_key") String api_key,

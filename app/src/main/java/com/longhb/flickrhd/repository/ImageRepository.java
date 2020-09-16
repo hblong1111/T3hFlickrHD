@@ -43,8 +43,8 @@ public class ImageRepository {
                 NOJSONCALLBACK);
     }
 
-    public int insertImage(Image image) {
-        return imageDao.insertImage(image);
+    public void insertImage(Image image) {
+         imageDao.insertImage(image);
     }
 
     public void deleteImage(int id) {
