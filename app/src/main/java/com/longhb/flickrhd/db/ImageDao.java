@@ -12,7 +12,7 @@ import java.util.List;
 @Dao
 public interface ImageDao {
     @Insert
-    void insertImage(Image image);
+    int insertImage(Image image);
 
     @Query("delete from favourite where id=:id")
     void deleteImage(int id);
