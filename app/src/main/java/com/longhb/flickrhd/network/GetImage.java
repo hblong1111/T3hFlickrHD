@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.longhb.flickrhd.model.Category;
 import com.longhb.flickrhd.model.Image;
 
 import java.util.List;
@@ -213,10 +214,12 @@ public class GetImage {
 
             public Image getImage() {
                 String url = null;
+                String url_o = null;
                 int h = 0, w = 0;
                 if (urlO != null && !urlO.isEmpty()) {
-                    url = urlO;
-                } else if (urlL != null && !urlL.isEmpty()) {
+                    url_o = urlO;
+                }
+                if (urlL != null && !urlL.isEmpty()) {
                     url = urlL;
                 } else if (urlC != null && !urlC.isEmpty()) {
                     url = urlC;
@@ -231,16 +234,50 @@ public class GetImage {
                 } else if (urlS != null && !urlS.isEmpty()) {
                     url = urlS;
                 }
-                if (heightL!=null){
-                    w=widthL;
-                    h=heightL;
-                }else {
-                    w=400;
-                    h=600;
+                if (heightL != null) {
+                    w = widthL;
+                    h = heightL;
+                } else {
+                    w = 400;
+                    h = 600;
                 }
-                return new Image(h, w, url, getViews());
+                if (url_o == null) {
+                    url_o = url;
+                }
+                return new Image(h, w, url, getViews(), url_o);
             }
 
+            public Category getCategory(boolean isSystem,String title) {
+                String url = null;
+                String url_o = null;
+                int h = 0, w = 0;
+                if (urlO != null && !urlO.isEmpty()) {
+                    url_o = urlO;
+                }
+                if (urlL != null && !urlL.isEmpty()) {
+                    url = urlL;
+                } else if (urlC != null && !urlC.isEmpty()) {
+                    url = urlC;
+                } else if (urlZ != null && !urlZ.isEmpty()) {
+                    url = urlZ;
+                } else if (urlN != null && !urlN.isEmpty()) {
+                    url = urlN;
+                } else if (urlM != null && !urlM.isEmpty()) {
+                    url = urlM;
+                } else if (urlQ != null && !urlQ.isEmpty()) {
+                    url = urlQ;
+                } else if (urlS != null && !urlS.isEmpty()) {
+                    url = urlS;
+                }
+                if (heightL != null) {
+                    w = widthL;
+                    h = heightL;
+                } else {
+                    w = 400;
+                    h = 600;
+                }
+                return new Category(title,url,w,h,isSystem);
+            }
             public String getId() {
                 return id;
             }

@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.longhb.flickrhd.model.Category;
 import com.longhb.flickrhd.model.Image;
 import com.longhb.flickrhd.network.GetImage;
 import com.longhb.flickrhd.repository.ImageRepository;
@@ -18,14 +19,16 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ImageViewModel extends ViewModel {
+public class HomeActivityViewModel extends ViewModel {
     private ImageRepository imageRepository;
     private MutableLiveData<List<Image>> mListImageNetwork = new MutableLiveData<>();
     private LiveData<List<Image>> mLitsImageFavourite;
+    private LiveData<List<Category>> mListCategory;
 
-    public ImageViewModel(Application application) {
+    public HomeActivityViewModel(Application application) {
         this.imageRepository = new ImageRepository(application);
         this.mLitsImageFavourite = imageRepository.getImageFavourite();
+        this.mListCategory = imageRepository.getAllCategory();
     }
 
     public MutableLiveData<List<Image>> getListImageNetwork() {
@@ -72,4 +75,21 @@ public class ImageViewModel extends ViewModel {
         });
     }
 
+    public LiveData<List<Category>> getListCategory() {
+        return mListCategory;
+    }
+
+
+    //Category
+    public void insertCategory(Category category){
+        imageRepository.insertCategory(category);
+    }
+
+    public Call<GetImage> getCategoryNetWork(String s){
+        return imageRepository.getImagesNetWork(1,1,s);
+    }
+
+    public void deleteCategory(int id){
+        imageRepository.deleteCategory(id);
+    }
 }

@@ -8,13 +8,14 @@ public class Image {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private int height,with;
-    private String url,views;
+    private String url,views,url_o;
 
-    public Image(int height, int with, String url, String views) {
+    public Image(int height, int with, String url, String views, String url_o) {
         this.height = height;
         this.with = with;
         this.url = url;
         this.views = views;
+        this.url_o = url_o;
     }
 
     public int getId() {
@@ -55,5 +56,13 @@ public class Image {
 
     public void setViews(String views) {
         this.views = views;
+    }
+
+    public String getUrl_o() {
+        return url_o;
+    }
+
+    public void setUrl_o(String url_o) {
+        this.url_o = url_o;
     }
 }
