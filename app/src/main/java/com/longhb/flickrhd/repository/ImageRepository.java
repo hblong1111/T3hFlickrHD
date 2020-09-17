@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData;
 import com.longhb.flickrhd.db.ImageDao;
 import com.longhb.flickrhd.db.ImageDatabase;
 import com.longhb.flickrhd.model.Image;
-import com.longhb.flickrhd.network.GetImagesFavourite;
+import com.longhb.flickrhd.network.GetImage;
 import com.longhb.flickrhd.network.ImageModule;
 import com.longhb.flickrhd.network.ImageService;
 import com.longhb.flickrhd.util.Const;
@@ -32,7 +32,7 @@ public class ImageRepository {
         this.imageService = ImageModule.getInstance();
     }
 
-    public Call<GetImagesFavourite> getImagesNetWork(int per_page, int page,String text) {
+    public Call<GetImage> getImagesNetWork(int per_page, int page, String text) {
         return imageService.seachImages(METHOD_SEACH,Const.KEY_TOKEN,EXTRAS,per_page+"",page+"",text,"relevance",FORMAT,NOJSONCALLBACK);
     }
 

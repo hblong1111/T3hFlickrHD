@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.longhb.flickrhd.model.Image;
-import com.longhb.flickrhd.network.GetImagesFavourite;
+import com.longhb.flickrhd.network.GetImage;
 import com.longhb.flickrhd.repository.ImageRepository;
 
 import java.util.ArrayList;
@@ -49,12 +49,12 @@ public class ImageViewModel extends ViewModel {
     }
 
     public void getAllImageNetwork(int per_page,int page,String text) {
-        imageRepository.getImagesNetWork(per_page, page,text).enqueue(new Callback<GetImagesFavourite>() {
+        imageRepository.getImagesNetWork(per_page, page,text).enqueue(new Callback<GetImage>() {
             @Override
-            public void onResponse(Call<GetImagesFavourite> call, Response<GetImagesFavourite> response) {
-                List<GetImagesFavourite.Photos.Photo> photos = response.body().getPhotos().getPhoto();
+            public void onResponse(Call<GetImage> call, Response<GetImage> response) {
+                List<GetImage.Photos.Photo> photos = response.body().getPhotos().getPhoto();
                 List<Image> images = new ArrayList<>();
-                for (GetImagesFavourite.Photos.Photo photo :
+                for (GetImage.Photos.Photo photo :
                         photos) {
                     images.add(photo.getImage());
                 }
@@ -65,8 +65,10 @@ public class ImageViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<GetImagesFavourite> call, Throwable t) {
+            public void onFailure(Call<GetImage> call, Throwable t) {
+
             }
+
         });
     }
 
