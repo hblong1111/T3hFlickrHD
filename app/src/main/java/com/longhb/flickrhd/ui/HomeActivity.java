@@ -2,6 +2,7 @@ package com.longhb.flickrhd.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -19,7 +20,7 @@ import com.longhb.flickrhd.viewmodel.ImageViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements ItemImageClick {
+public class HomeActivity extends AppCompatActivity implements ItemImageClick {
 
     private RecyclerView recyclerView;
 
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements ItemImageClick {
 
     private int per_page=6;
     private int page_=1;
+    private  String text="Việt Nam";
 
 
     @Override
@@ -40,16 +42,15 @@ public class MainActivity extends AppCompatActivity implements ItemImageClick {
 
         initView();
 
-        viewModel = new ImageViewModel(getApplication());
+        viewModel =new ImageViewModel(getApplication());
 
         data = viewModel.getListImageNetwork();
         data.observe(this, images -> {
             imageList.addAll(images);
             imageAdapter.notifyDataSetChanged();
         });
-        viewModel.getAllImageNetwork(per_page,page_);
 
-
+        viewModel.getAllImageNetwork(per_page,page_,text);
     }
 
     private void initView() {
@@ -71,13 +72,13 @@ public class MainActivity extends AppCompatActivity implements ItemImageClick {
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 page++;
                 Log.e("OKK",page+"");
-                viewModel.getAllImageNetwork(per_page,page);
+                viewModel.getAllImageNetwork(per_page,page,text);
             }
         });
     }
 
     @Override
     public void onItemImageClick(int position) {
-        viewModel.insertImage(imageList.get(position));
+//        viewModel.insertImage(imageList.get(position));
     }
 }

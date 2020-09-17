@@ -48,8 +48,8 @@ public class ImageViewModel extends ViewModel {
         imageRepository.deleteAllImage();
     }
 
-    public void getAllImageNetwork(int per_page,int page) {
-        imageRepository.getImagesNetWork(per_page, page).enqueue(new Callback<GetImagesFavourite>() {
+    public void getAllImageNetwork(int per_page,int page,String text) {
+        imageRepository.getImagesNetWork(per_page, page,text).enqueue(new Callback<GetImagesFavourite>() {
             @Override
             public void onResponse(Call<GetImagesFavourite> call, Response<GetImagesFavourite> response) {
                 List<GetImagesFavourite.Photos.Photo> photos = response.body().getPhotos().getPhoto();
@@ -59,7 +59,6 @@ public class ImageViewModel extends ViewModel {
                     images.add(photo.getImage());
                 }
                 if (photos.size()==0){
-                    Log.e("size",0+"");
                 }
                 mListImageNetwork.postValue(images);
 

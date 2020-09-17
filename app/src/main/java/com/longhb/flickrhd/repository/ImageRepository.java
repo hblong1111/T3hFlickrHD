@@ -18,6 +18,7 @@ import retrofit2.Call;
 
 public class ImageRepository {
     private final String METHOD = "flickr.favorites.getList";
+    private final String METHOD_SEACH = "flickr.photos.search";
     private final String EXTRAS = "views, media, path_alias, url_sq, url_t, url_s, url_q, url_m, url_n, url_z, url_c, url_l, url_o";//extras
     private final String FORMAT = "json";//extras
     private final String NOJSONCALLBACK = "1";//extras
@@ -31,16 +32,8 @@ public class ImageRepository {
         this.imageService = ImageModule.getInstance();
     }
 
-    public Call<GetImagesFavourite> getImagesNetWork(int per_page, int page) {
-        return imageService.getAllImageFavourite(
-                METHOD,
-                Const.KEY_TOKEN,
-                Const.USER_ID,
-                EXTRAS,
-                per_page + "",
-                page + "",
-                FORMAT,
-                NOJSONCALLBACK);
+    public Call<GetImagesFavourite> getImagesNetWork(int per_page, int page,String text) {
+        return imageService.seachImages(METHOD_SEACH,Const.KEY_TOKEN,EXTRAS,per_page+"",page+"",text,"relevance",FORMAT,NOJSONCALLBACK);
     }
 
     public void insertImage(Image image) {
