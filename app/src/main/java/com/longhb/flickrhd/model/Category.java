@@ -8,17 +8,27 @@ import androidx.room.PrimaryKey;
 public class Category {
     @PrimaryKey(autoGenerate = true)
     private int id;
-    private String title,url;
+    private String title,url,text;
     private int w,h;
     @ColumnInfo(name = "is_system")
     private boolean isSystem;
 
-    public Category(String title, String url, int w, int h, boolean isSystem) {
+
+    public Category(String title, String url, String text, int w, int h, boolean isSystem) {
         this.title = title;
         this.url = url;
+        this.text = text;
         this.w = w;
         this.h = h;
         this.isSystem = isSystem;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public int getId() {

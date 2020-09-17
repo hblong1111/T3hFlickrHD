@@ -16,8 +16,8 @@ public class MyViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        if (modelClass.isAssignableFrom(SplashActivityViewModel.class) ){
-            return (T) new SplashActivityViewModel(application);
+        if (modelClass.isAssignableFrom(ListImageActivityViewModel.class) ){
+            return (T) new ListImageActivityViewModel(application);
         }
         return (T) new HomeActivityViewModel(application);
     }

@@ -59,6 +59,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 .into(holder.imgAvt);
 
         setAnimationItemView(holder.itemView);
+
+        holder.itemView.setOnClickListener(view -> callback.onClickItem(position));
     }
 
     private void setAnimationItemView(View itemView) {

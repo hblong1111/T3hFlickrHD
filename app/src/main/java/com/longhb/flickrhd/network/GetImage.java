@@ -247,7 +247,7 @@ public class GetImage {
                 return new Image(h, w, url, getViews(), url_o);
             }
 
-            public Category getCategory(boolean isSystem,String title) {
+            public Category getCategory(boolean isSystem,String title,String text) {
                 String url = null;
                 String url_o = null;
                 int h = 0, w = 0;
@@ -276,7 +276,7 @@ public class GetImage {
                     w = 400;
                     h = 600;
                 }
-                return new Category(title,url,w,h,isSystem);
+                return new Category(title,url,text,w,h,isSystem);
             }
             public String getId() {
                 return id;

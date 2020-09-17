@@ -5,13 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.longhb.flickrhd.R;
 import com.longhb.flickrhd.model.Image;
-import com.longhb.flickrhd.util.ItemImageClick;
+import com.longhb.flickrhd.util.ImageAdapterEvent;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -19,9 +20,9 @@ import java.util.List;
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
     private Context context;
     private List<Image> list;
-    private ItemImageClick callBack;
+    private ImageAdapterEvent callBack;
 
-    public ImageAdapter(Context context, List<Image> list, ItemImageClick callBack) {
+    public ImageAdapter(Context context, List<Image> list, ImageAdapterEvent callBack) {
         this.context = context;
         this.list = list;
         this.callBack = callBack;
@@ -37,6 +38,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
+        holder.tvView.setText(list.get(position).getViews());
         holder.imageView.setMinimumHeight(list.get(position).getHeight());
         holder.imageView.setMinimumWidth(list.get(position).getWith());
         Picasso.get().load(list.get(position).getUrl())
@@ -60,11 +62,17 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView imageView;
+        private ImageView imgView;
+        private TextView tvView;
+
+
 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
+            imgView = (ImageView) itemView.findViewById(R.id.img_view);
+            tvView = (TextView) itemView.findViewById(R.id.tv_view);
         }
     }
 }

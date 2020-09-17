@@ -1,29 +1,20 @@
 package com.longhb.flickrhd.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.longhb.flickrhd.R;
 import com.longhb.flickrhd.adpater.CategoryAdapter;
-import com.longhb.flickrhd.adpater.ImageAdapter;
 import com.longhb.flickrhd.model.Category;
-import com.longhb.flickrhd.model.Image;
 import com.longhb.flickrhd.network.GetImage;
 import com.longhb.flickrhd.util.CategoryAdapterEvent;
 import com.longhb.flickrhd.util.Const;
-import com.longhb.flickrhd.util.EndlessRecyclerViewScrollListener;
-import com.longhb.flickrhd.util.ItemImageClick;
-import com.longhb.flickrhd.util.OnSwipeTouchListener;
 import com.longhb.flickrhd.viewmodel.HomeActivityViewModel;
 import com.longhb.flickrhd.viewmodel.MyViewModelFactory;
 
@@ -71,12 +62,12 @@ public class HomeActivity extends AppCompatActivity implements CategoryAdapterEv
                     viewModel.getCategoryNetWork(Const.CATEGORYS[i]).enqueue(new Callback<GetImage>() {
                         @Override
                         public void onResponse(Call<GetImage> call, Response<GetImage> response) {
-                            viewModel.insertCategory(response.body().getPhotos().getPhoto().get(0).getCategory(true, Const.CATEGORYS_TITLE[finalI]));
+                            viewModel.insertCategory(response.body().getPhotos().getPhoto().get(0).getCategory(true, Const.CATEGORYS_TITLE[finalI],Const.CATEGORYS[finalI]));
                         }
 
                         @Override
                         public void onFailure(Call<GetImage> call, Throwable t) {
-                            Log.e("longhb", "Lỗi thêm category mặc định : "+t.getMessage());
+                            Log.e("longhb", "Lỗi thêm category mặc định : " + t.getMessage());
                         }
                     });
                 }
@@ -92,8 +83,13 @@ public class HomeActivity extends AppCompatActivity implements CategoryAdapterEv
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
     }
 
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
 
+    //Oclick ItemCategoryAdapter
+    @Override
+    public void onClickItem(int pos) {
+        Intent intent = new Intent(HomeActivity.this, ListImageActivity.class);
+        intent.putExtra("text", categories.get(pos).getText());
+        startActivity(intent);
+        overridePendingTransition(R.anim.in_right,R.anim.out_left);
     }
 }
