@@ -78,7 +78,7 @@ public class HomeActivity extends AppCompatActivity implements CategoryAdapterEv
     }
 
     private void createData() {
-        viewModel = ViewModelProviders.of(this, new MyViewModelFactory(getApplication())).get(HomeActivityViewModel.class);
+        viewModel = ViewModelProviders.of(this, new MyViewModelFactory(getApplication(),this)).get(HomeActivityViewModel.class);
         categories = new ArrayList<>();
         categoryAdapter = new CategoryAdapter(this, categories, this);
 

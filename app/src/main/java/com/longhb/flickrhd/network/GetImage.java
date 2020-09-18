@@ -215,9 +215,10 @@ public class GetImage {
             public Image getImage() {
                 String url = null;
                 String url_o = null;
-                int h = 0, w = 0;
+                int h = 0, w = 0,hO=0;
                 if (urlO != null && !urlO.isEmpty()) {
                     url_o = urlO;
+                    hO=heightO;
                 }
                 if (urlL != null && !urlL.isEmpty()) {
                     url = urlL;
@@ -243,8 +244,9 @@ public class GetImage {
                 }
                 if (url_o == null) {
                     url_o = url;
+                    hO=h;
                 }
-                return new Image(h, w, url, getViews(), url_o);
+                return new Image(h, w, hO,url, getViews(), url_o);
             }
 
             public Category getCategory(boolean isSystem,String title,String text) {

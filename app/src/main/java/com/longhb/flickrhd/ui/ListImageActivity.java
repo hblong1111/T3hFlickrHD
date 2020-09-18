@@ -1,6 +1,7 @@
 package com.longhb.flickrhd.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.TaskStackBuilder;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -13,12 +14,14 @@ import android.os.Bundle;
 import com.longhb.flickrhd.R;
 import com.longhb.flickrhd.adpater.ImageAdapter;
 import com.longhb.flickrhd.model.Image;
+import com.longhb.flickrhd.util.Const;
 import com.longhb.flickrhd.util.EndlessRecyclerViewScrollListener;
 import com.longhb.flickrhd.util.ImageAdapterEvent;
 import com.longhb.flickrhd.util.OnSwipeTouchListener;
 import com.longhb.flickrhd.viewmodel.ListImageActivityViewModel;
 import com.longhb.flickrhd.viewmodel.MyViewModelFactory;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,7 +77,7 @@ public class ListImageActivity extends AppCompatActivity implements ImageAdapter
     }
 
     private void createData() {
-        viewModel = ViewModelProviders.of(this, new MyViewModelFactory(getApplication())).get(ListImageActivityViewModel.class);
+        viewModel = ViewModelProviders.of(this, new MyViewModelFactory(getApplication(),this)).get(ListImageActivityViewModel.class);
         mListImageNetwork = viewModel.getmListImageNetwork();
         text = getIntent().getStringExtra("text");
         viewModel.getAllImageNetwork(perPage, page, text);
@@ -91,13 +94,18 @@ public class ListImageActivity extends AppCompatActivity implements ImageAdapter
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(ListImageActivity.this,HomeActivity.class));
-        overridePendingTransition(R.anim.in_left,R.anim.out_right);
+        super.onBackPressed();
+        overridePendingTransition(R.anim.in_left, R.anim.out_right);
         finish();
     }
 
     @Override
     public void onItemImageClick(int position) {
+        Intent intent = new Intent(ListImageActivity.this, ImageDetailActivity.class);
+        intent.putExtra(Const.KEY_INTENT_LIST_IMAGE, (Serializable) images);
+        intent.putExtra(Const.KEY_INTENT_LIST_IMAGE_POS, position);
+        startActivity(intent);
+        overridePendingTransition(R.anim.in_right, R.anim.out_left);
 
     }
 }
