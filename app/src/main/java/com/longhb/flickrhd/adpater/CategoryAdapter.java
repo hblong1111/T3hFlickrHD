@@ -58,9 +58,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 .placeholder(R.drawable.place_category)
                 .into(holder.imgAvt);
 
-        setAnimationItemView(holder.itemView);
 
         holder.itemView.setOnClickListener(view -> callback.onClickItem(position));
+
+        setAnimationItemView(holder.itemView);
     }
 
     private void setAnimationItemView(View itemView) {
@@ -73,7 +74,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         String[] strings = category.getTitle().trim().split(" ");
         String textHtml = "";
         for (int i = 0; i < strings.length; i++) {
-            if (i <= (strings.length-1) / 2) {
+            if (i <= (strings.length - 1) / 2) {
                 textHtml += "<span style=\"color: #FFD500\">" + strings[i] + " </span>";
             } else {
                 textHtml += "<span style=\"color: #FFFFFF\">" + strings[i] + "</span>";

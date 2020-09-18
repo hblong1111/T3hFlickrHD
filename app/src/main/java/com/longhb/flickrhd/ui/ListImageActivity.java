@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.longhb.flickrhd.R;
@@ -86,6 +87,13 @@ public class ListImageActivity extends AppCompatActivity implements ImageAdapter
         recyclerView2 = (RecyclerView) findViewById(R.id.recyclerView2);
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(ListImageActivity.this,HomeActivity.class));
+        overridePendingTransition(R.anim.in_left,R.anim.out_right);
+        finish();
     }
 
     @Override
