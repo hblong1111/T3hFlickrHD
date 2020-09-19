@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.longhb.flickrhd.R;
 import com.longhb.flickrhd.adpater.ImageDetailAdapterViewPager;
@@ -20,48 +21,52 @@ public class ImageDetailActivity extends AppCompatActivity {
 
 
     private List<Image> images;
-    private int pos;
+    private int pos = -1;
     private ImageDetailAdapterViewPager adapterViewPager;
 
-    private   DetailViewModel viewModel;
+    public static DetailViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_detail);
 
-        createData();
-
         initView();
 
+        createData();
     }
 
+
     @Override
-    protected void onPause() {
-        super.onPause();
-        viewModel.setCurPage(viewPager.getCurrentItem());
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    private void createData() {
+        viewModel = ViewModelProviders.of(this, new MyViewModelFactory(getApplication(), this)).get(DetailViewModel.class);
+        images = new ArrayList<>();
+
+
+
+        viewModel.getmListImage(this).observe(this, images1 -> settingViewPager(images1));
     }
 
     private void settingViewPager(List<Image> images1) {
         images.addAll(images1);
+        Log.d("longhbs", images1.size() + "");
         adapterViewPager = new ImageDetailAdapterViewPager(getSupportFragmentManager(), images);
         viewPager.setAdapter(adapterViewPager);
         viewModel.getCurPage(this).observe(this, integer -> {
-            pos = integer;
-            viewPager.setCurrentItem(pos);
+            Log.d("longhbs", integer + "");
+            if (pos == -1) {
+                pos = integer;
+                viewPager.setCurrentItem(pos);
+            }
         });
-    }
-
-
-    private void createData() {
-        viewModel = ViewModelProviders.of(this, new MyViewModelFactory(getApplication(),this)).get(DetailViewModel.class);
-        images = new ArrayList<>();
-        viewModel.getmListImage(this).observe(this, images1 -> settingViewPager(images1));
     }
 
     private void initView() {
         viewPager = findViewById(R.id.viewPager);
-
     }
 
     @Override

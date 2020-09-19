@@ -37,7 +37,6 @@ public class ImageRepository {
     }
 
 
-
     //Image network
     public Call<GetImage> getImagesNetWork(int per_page, int page, String text) {
         return imageService.seachImages(METHOD_SEACH, Const.KEY_TOKEN, EXTRAS, per_page + "", page + "", text, "relevance", FORMAT, NOJSONCALLBACK);
@@ -78,7 +77,12 @@ public class ImageRepository {
         categoryDao.updateCategory(id, title);
     }
 
-    public LiveData<List<Category>> getAllCategory(){
-       return categoryDao.getAllCategory();
+    public LiveData<List<Category>> getAllCategory() {
+        return categoryDao.getAllCategory();
     }
+
+    public MutableLiveData<List<Category>> getAllCategoryAdd() {
+        return categoryDao.getAllCategoryAdd(false);
+    }
+
 }

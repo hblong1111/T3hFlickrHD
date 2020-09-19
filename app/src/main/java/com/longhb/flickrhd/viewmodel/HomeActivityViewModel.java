@@ -33,15 +33,21 @@ public class HomeActivityViewModel extends ViewModel {
     private ImageRepository imageRepository;
     private AlertDialog alertDialog;
     private LiveData<List<Category>> mListCategory;
+    private MutableLiveData<List<Category>> mListCategoryAdd = new MutableLiveData<>();
 
 
     public HomeActivityViewModel(Application application) {
         this.imageRepository = new ImageRepository(application);
         this.mListCategory = imageRepository.getAllCategory();
+        mListCategoryAdd = imageRepository.getAllCategoryAdd();
     }
 
     public LiveData<List<Category>> getListCategory() {
         return mListCategory;
+    }
+
+    public MutableLiveData<List<Category>> getListCategoryAdd() {
+        return mListCategoryAdd;
     }
 
 
@@ -99,10 +105,10 @@ public class HomeActivityViewModel extends ViewModel {
                 getCategoryNetWork(edtTitle.getText().toString()).enqueue(new Callback<GetImage>() {
                     @Override
                     public void onResponse(Call<GetImage> call, Response<GetImage> response) {
-                        if (response.body().getPhotos().getPhoto().size()!=0){ 
+                        if (response.body().getPhotos().getPhoto().size() != 0) {
                             insertCategory(response.body().getPhotos().getPhoto().get(0).getCategory(false, edtTitle.getText().toString(), edtTitle.getText().toString()));
 
-                        }else {
+                        } else {
                             Toast.makeText(context, "Chủ đề của bạn chưa được phát triển!", Toast.LENGTH_SHORT).show();
                         }
                         alertDialog.dismiss();

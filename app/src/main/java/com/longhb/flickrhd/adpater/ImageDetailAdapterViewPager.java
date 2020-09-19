@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.longhb.flickrhd.fragment.ImageDetailFaragment;
 import com.longhb.flickrhd.model.Image;
+import com.longhb.flickrhd.ui.ImageDetailActivity;
 
 import java.util.List;
 

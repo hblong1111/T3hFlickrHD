@@ -9,11 +9,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
 
 import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.longhb.flickrhd.R;
 import com.longhb.flickrhd.model.Image;
+import com.longhb.flickrhd.ui.ImageDetailActivity;
+import com.longhb.flickrhd.viewmodel.DetailViewModel;
 import com.squareup.picasso.Picasso;
 
 public class ImageDetailFaragment extends Fragment {
@@ -26,13 +29,13 @@ public class ImageDetailFaragment extends Fragment {
         this.image = image;
     }
 
-    public ImageDetailFaragment() {
+    private ImageDetailFaragment() {
 
     }
 
     public static ImageDetailFaragment getInstance(Image image) {
         if (INSTANCE == null) {
-            INSTANCE = new ImageDetailFaragment();
+            INSTANCE = new ImageDetailFaragment(image);
         }
         INSTANCE.setImage(image);
         return INSTANCE;
