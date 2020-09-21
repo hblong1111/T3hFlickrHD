@@ -24,7 +24,7 @@ public class DetailViewModel extends ViewModel {
 
     }
 
-    public MutableLiveData<List<Image>> getmListImage(Activity activity) {
+    public MutableLiveData<List<Image>> getmListImage( ) {
         return mListImage;
     }
 
@@ -33,7 +33,7 @@ public class DetailViewModel extends ViewModel {
         this.mListImage = mListImage;
     }
 
-    public MutableLiveData<Integer> getCurPage(Activity activity) { 
+    public MutableLiveData<Integer> getCurPage( ) {
         return curPage;
     }
 

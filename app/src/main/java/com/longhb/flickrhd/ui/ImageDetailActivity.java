@@ -38,26 +38,22 @@ public class ImageDetailActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 
     private void createData() {
-        viewModel = ViewModelProviders.of(this, new MyViewModelFactory(getApplication(), this)).get(DetailViewModel.class);
+        viewModel = ViewModelProviders.of(this, new MyViewModelFactory(getApplication(), this,"")).get(DetailViewModel.class);
         images = new ArrayList<>();
 
 
 
-        viewModel.getmListImage(this).observe(this, images1 -> settingViewPager(images1));
+        viewModel.getmListImage( ).observe(this, images1 -> settingViewPager(images1));
     }
 
     private void settingViewPager(List<Image> images1) {
         images.addAll(images1);
         Log.d("longhbs", images1.size() + "");
-        adapterViewPager = new ImageDetailAdapterViewPager(getSupportFragmentManager(), images);
+        adapterViewPager = new ImageDetailAdapterViewPager(getSupportFragmentManager(), images,viewModel);
         viewPager.setAdapter(adapterViewPager);
-        viewModel.getCurPage(this).observe(this, integer -> {
+        viewModel.getCurPage( ).observe(this, integer -> {
             Log.d("longhbs", integer + "");
             if (pos == -1) {
                 pos = integer;

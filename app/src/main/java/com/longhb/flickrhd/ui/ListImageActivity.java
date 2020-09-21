@@ -1,5 +1,6 @@
 package com.longhb.flickrhd.ui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.TaskStackBuilder;
 import androidx.lifecycle.MutableLiveData;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.longhb.flickrhd.R;
 import com.longhb.flickrhd.adpater.ImageAdapter;
@@ -23,6 +25,7 @@ import com.longhb.flickrhd.viewmodel.MyViewModelFactory;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class ListImageActivity extends AppCompatActivity implements ImageAdapterEvent {
@@ -33,10 +36,13 @@ public class ListImageActivity extends AppCompatActivity implements ImageAdapter
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
     private ListImageActivityViewModel viewModel;
     private MutableLiveData<List<Image>> mListImageNetwork;
-
+    private MutableLiveData<Integer> mPage;
     private int perPage = 6;
-    private int page = 1;
+    private int page;
     private String text;
+
+
+    private boolean isLodeMore = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,18 +51,25 @@ public class ListImageActivity extends AppCompatActivity implements ImageAdapter
 
         initView();
 
-        createData();
+        createData(savedInstanceState);
 
         settingRecyclerView();
 
-        changeData();
+        changeData(savedInstanceState);
     }
 
-    private void changeData() {
+    private void changeData(Bundle savedInstanceState) {
         mListImageNetwork.observe(this, images -> {
-            ListImageActivity.this.images.addAll(images);
-            adapter.notifyDataSetChanged();
+            if ((savedInstanceState == null && this.images.size() == 0) || isLodeMore) {
+                ListImageActivity.this.images.addAll(images);
+                adapter.notifyDataSetChanged();
+
+            }
+
+            Log.e("longhbs", "Size;" + images.size());
         });
+
+        mPage.observe(this,integer -> page=integer);
     }
 
     private void settingRecyclerView() {
@@ -69,27 +82,33 @@ public class ListImageActivity extends AppCompatActivity implements ImageAdapter
     private void addLoadMore() {
         recyclerView2.addOnScrollListener(new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
             @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+            public void onLoadMore(int p, int totalItemsCount, RecyclerView view) {
+                isLodeMore = true;
                 page++;
+                viewModel.setmPage(page);
                 viewModel.getAllImageNetwork(perPage, page, text);
+
+                Log.e("longhbs", "Page : " + page);
             }
         });
     }
 
-    private void createData() {
-        viewModel = ViewModelProviders.of(this, new MyViewModelFactory(getApplication(),this)).get(ListImageActivityViewModel.class);
-        mListImageNetwork = viewModel.getmListImageNetwork();
+    private void createData(Bundle savedInstanceState) {
         text = getIntent().getStringExtra("text");
-        viewModel.getAllImageNetwork(perPage, page, text);
         images = new ArrayList<>();
+        if (savedInstanceState != null) {
+            images.addAll((Collection<? extends Image>) savedInstanceState.getSerializable("listImage"));
+        }
+        Log.e("longhbs", "Size;" + images.size());
+        viewModel = ViewModelProviders.of(this, new MyViewModelFactory(getApplication(), this, text)).get(ListImageActivityViewModel.class);
+        mListImageNetwork = viewModel.getmListImageNetwork();
+        mPage=viewModel.getmPage();
         adapter = new ImageAdapter(this, images, this);
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
     }
 
     private void initView() {
         recyclerView2 = (RecyclerView) findViewById(R.id.recyclerView2);
-
-
     }
 
     @Override
@@ -107,5 +126,11 @@ public class ListImageActivity extends AppCompatActivity implements ImageAdapter
         startActivity(intent);
         overridePendingTransition(R.anim.in_right, R.anim.out_left);
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("listImage", (Serializable) images);
     }
 }
