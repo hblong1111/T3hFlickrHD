@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.longhb.flickrhd.R;
@@ -41,11 +42,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.adapter_item_category, parent, false);
+
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
         Category category = list.get(position);
         getTextHtml(category);
         holder.tvTitle.setText(Html.fromHtml(getTextHtml(category)));
@@ -58,10 +61,30 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 .placeholder(R.drawable.place_category)
                 .into(holder.imgAvt);
 
-
         holder.itemView.setOnClickListener(view -> callback.onClickItem(position));
-
         setAnimationItemView(holder.itemView);
+        holder.itemView.setOnLongClickListener(view -> {
+            Animation animation = AnimationUtils.loadAnimation(context, R.anim.item_longclick);
+            animation.setInterpolator(new LinearInterpolator());
+            holder.cardView.startAnimation(animation);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    holder.cardSelect.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            return true;
+        });
     }
 
     private void setAnimationItemView(View itemView) {
@@ -92,12 +115,21 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView imgAvt;
         private TextView tvTitle;
+        private CardView cardSelect;
+
+        private CardView cardView;
 
 
         public ViewHolder(@NonNull View itemView) {
+
+
             super(itemView);
             imgAvt = (ImageView) itemView.findViewById(R.id.img_avt);
             tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
+
+            cardSelect = itemView.findViewById(R.id.card_select);
+            cardView = itemView.findViewById(R.id.cardView);
+
 
         }
 

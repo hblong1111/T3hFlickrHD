@@ -29,7 +29,7 @@ public class ImageDetailFaragment extends Fragment {
         this.image = image;
     }
 
-    private ImageDetailFaragment() {
+    public ImageDetailFaragment() {
 
     }
 
@@ -46,12 +46,19 @@ public class ImageDetailFaragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_image_detail, container, false);
         photoView = view.findViewById(R.id.photoView);
+        if (image==null){
+            image= (Image) savedInstanceState.getSerializable("iamgeDetail");
+        }
         Log.e("imgaeif","h:" +image.getH_o());
-        photoView.setMinimumHeight(image.getH_o());
-        photoView.setMaxHeight(image.getH_o());
         Glide.with(getContext()).load(image.getUrl_o()).placeholder(R.drawable.place_image_detail).into(photoView);
 
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("iamgeDetail",image);
     }
 
     public void setImage(Image image) {

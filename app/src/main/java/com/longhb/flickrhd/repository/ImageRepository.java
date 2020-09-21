@@ -81,7 +81,7 @@ public class ImageRepository {
         return categoryDao.getAllCategory();
     }
 
-    public MutableLiveData<List<Category>> getAllCategoryAdd() {
+    public LiveData<List<Category>> getAllCategoryAdd() {
         return categoryDao.getAllCategoryAdd(false);
     }
 

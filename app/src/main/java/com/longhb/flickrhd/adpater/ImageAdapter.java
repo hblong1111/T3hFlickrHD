@@ -46,12 +46,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
                 .placeholder(R.drawable.place)
                 .into(holder.imageView);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                callBack.onItemImageClick(position);
-            }
-        });
+        holder.itemView.setOnClickListener(view -> callBack.onItemImageClick(position));
     }
 
     @Override
@@ -62,7 +57,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView imageView;
-        private ImageView imgView;
         private TextView tvView;
 
 
@@ -71,7 +65,6 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
-            imgView = (ImageView) itemView.findViewById(R.id.img_view);
             tvView = (TextView) itemView.findViewById(R.id.tv_view);
         }
     }

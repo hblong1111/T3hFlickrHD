@@ -33,7 +33,7 @@ public class HomeActivityViewModel extends ViewModel {
     private ImageRepository imageRepository;
     private AlertDialog alertDialog;
     private LiveData<List<Category>> mListCategory;
-    private MutableLiveData<List<Category>> mListCategoryAdd = new MutableLiveData<>();
+    private LiveData<List<Category>> mListCategoryAdd  ;
 
 
     public HomeActivityViewModel(Application application) {
@@ -46,7 +46,7 @@ public class HomeActivityViewModel extends ViewModel {
         return mListCategory;
     }
 
-    public MutableLiveData<List<Category>> getListCategoryAdd() {
+    public LiveData<List<Category>> getListCategoryAdd() {
         return mListCategoryAdd;
     }
 

@@ -25,7 +25,7 @@ public interface CategoryDao {
     LiveData<List<Category>> getAllCategory();
 
     @Query("select * from category where is_system=:b")
-    MutableLiveData<List<Category>> getAllCategoryAdd(boolean b);
+    LiveData<List<Category>> getAllCategoryAdd(boolean b);
 
     @Query("update category set title=:title where id=:id")
     void  updateCategory(int id, String title);

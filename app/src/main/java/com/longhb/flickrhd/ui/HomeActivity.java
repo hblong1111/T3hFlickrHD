@@ -1,27 +1,38 @@
 package com.longhb.flickrhd.ui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.Group;
+import androidx.core.widget.AutoScrollHelper;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.longhb.flickrhd.BaseActivity;
 import com.longhb.flickrhd.R;
 import com.longhb.flickrhd.adpater.CategoryAdapter;
 import com.longhb.flickrhd.model.Category;
 import com.longhb.flickrhd.network.GetImage;
 import com.longhb.flickrhd.util.CategoryAdapterEvent;
 import com.longhb.flickrhd.util.Const;
+import com.longhb.flickrhd.util.EndlessRecyclerViewScrollListener;
 import com.longhb.flickrhd.util.OnSwipeTouchListener;
 import com.longhb.flickrhd.viewmodel.HomeActivityViewModel;
 import com.longhb.flickrhd.viewmodel.MyViewModelFactory;
@@ -34,16 +45,20 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeActivity extends AppCompatActivity implements CategoryAdapterEvent {
+public class HomeActivity extends BaseActivity implements CategoryAdapterEvent {
 
     private RecyclerView recyclerView;
     private TextView tvBottomSheet;
+    private ConstraintLayout toolbar;
 
 
     private HomeActivityViewModel viewModel;
     private List<Category> categories;
     private CategoryAdapter categoryAdapter;
-    private AlertDialog alertDialog;
+
+
+    private LinearLayoutManager manager = new LinearLayoutManager(this);
+    private int y;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +71,7 @@ public class HomeActivity extends AppCompatActivity implements CategoryAdapterEv
         settingRecyclerView();
 
         openBottomSheet();
+
 
     }
 
@@ -70,15 +86,13 @@ public class HomeActivity extends AppCompatActivity implements CategoryAdapterEv
     }
 
 
-
-
     private void settingRecyclerView() {
         recyclerView.setAdapter(categoryAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(manager);
     }
 
     private void createData() {
-        viewModel = ViewModelProviders.of(this, new MyViewModelFactory(getApplication(),this)).get(HomeActivityViewModel.class);
+        viewModel = ViewModelProviders.of(this, new MyViewModelFactory(getApplication(), this)).get(HomeActivityViewModel.class);
         categories = new ArrayList<>();
         categoryAdapter = new CategoryAdapter(this, categories, this);
 

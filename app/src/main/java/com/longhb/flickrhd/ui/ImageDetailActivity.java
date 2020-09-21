@@ -1,5 +1,6 @@
 package com.longhb.flickrhd.ui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
@@ -24,7 +25,7 @@ public class ImageDetailActivity extends AppCompatActivity {
     private int pos = -1;
     private ImageDetailAdapterViewPager adapterViewPager;
 
-    public static DetailViewModel viewModel;
+    public   DetailViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,4 +76,6 @@ public class ImageDetailActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.in_left, R.anim.out_right);
         finish();
     }
+
+
 }
