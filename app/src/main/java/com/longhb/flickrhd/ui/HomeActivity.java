@@ -16,11 +16,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,7 +51,13 @@ public class HomeActivity extends BaseActivity implements CategoryAdapterEvent {
 
     private RecyclerView recyclerView;
     private TextView tvBottomSheet;
+    private ConstraintLayout ct;
     private ConstraintLayout toolbar;
+    private ImageButton btnClose;
+    private TextView tvNumberSelect;
+    private ImageButton btnDelete;
+    private ImageButton btnSelectAll;
+    private ImageButton btnUnSelect;
 
 
     private HomeActivityViewModel viewModel;
@@ -58,7 +66,7 @@ public class HomeActivity extends BaseActivity implements CategoryAdapterEvent {
 
 
     private LinearLayoutManager manager = new LinearLayoutManager(this);
-    private int y;
+    private int numberChoose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +80,66 @@ public class HomeActivity extends BaseActivity implements CategoryAdapterEvent {
 
         openBottomSheet();
 
+        settingTollbar();
 
+    }
+
+    private void settingTollbar() {
+        btnDelete.setOnClickListener(view -> {
+            btnDeleteClick();
+        });
+
+        btnSelectAll.setOnClickListener(view -> btnSelectAllClick());
+
+        btnUnSelect.setOnClickListener(view -> btnUnSelectClick());
+
+        btnClose.setOnClickListener(view -> btnCloseClick());
+    }
+
+    private void btnUnSelectClick() {
+        for (int i = 0; i < categories.size(); i++) {
+            categories.get(i).setChoose(false);
+            categoryAdapter.notifyItemChanged(i);
+        }
+        viewModel.removeAllListChoose();
+        numberChoose = 0;
+        viewModel.setNumberSelect(numberChoose);
+    }
+
+    private void btnSelectAllClick() {
+        numberChoose = categories.size();
+        viewModel.setNumberSelect(numberChoose);
+        viewModel.removeAllListChoose();
+        for (int i = 0; i < categories.size(); i++) {
+            viewModel.getListIdItemChoose().add(categories.get(i).getId());
+            categories.get(i).setChoose(true);
+            categoryAdapter.notifyItemChanged(i);
+        }
+
+    }
+
+    private void btnCloseClick() {
+
+        categoryAdapter.setChoose(false);
+        Log.e("longhbs","close");
+        toolbar.setVisibility(View.GONE);
+        recyclerView.setPadding(0,0,0,0);
+        viewModel.getListIdItemChoose().clear();
+        for (int i = 0; i < categories.size(); i++) {
+            if (categories.get(i).isChoose()){
+                categories.get(i).setChoose(false);
+                categoryAdapter.notifyItemChanged(i);
+            }
+        }
+
+    }
+
+    private void btnDeleteClick() {
+        for (int i = 0; i < viewModel.getListIdItemChoose().size(); i++) {
+            viewModel.deleteCategory(viewModel.getListIdItemChoose().get(i));
+        }
+        numberChoose = 0;
+        viewModel.setNumberSelect(numberChoose);
     }
 
     private void openBottomSheet() {
@@ -92,7 +159,7 @@ public class HomeActivity extends BaseActivity implements CategoryAdapterEvent {
     }
 
     private void createData() {
-        viewModel = ViewModelProviders.of(this, new MyViewModelFactory(getApplication(), this,"")).get(HomeActivityViewModel.class);
+        viewModel = ViewModelProviders.of(this, new MyViewModelFactory(getApplication(), this, "")).get(HomeActivityViewModel.class);
         categories = new ArrayList<>();
         categoryAdapter = new CategoryAdapter(this, categories, this);
 
@@ -118,13 +185,26 @@ public class HomeActivity extends BaseActivity implements CategoryAdapterEvent {
                 categoryAdapter.notifyDataSetChanged();
             }
         });
+
+        //Listener event choose number change
+        viewModel.getNumberSelect().observe(this, s -> tvNumberSelect.setText(s));
     }
 
     private void initView() {
         recyclerView = findViewById(R.id.recyclerView);
         tvBottomSheet = findViewById(R.id.tv_bottom_sheet);
+        ct = findViewById(R.id.ct);
+        toolbar = findViewById(R.id.toolbar);
+        btnClose = findViewById(R.id.btn_close);
+        tvNumberSelect = findViewById(R.id.tv_number_select);
+        btnDelete = findViewById(R.id.btn_delete);
+        btnSelectAll = findViewById(R.id.btn_select_all);
+        btnUnSelect = findViewById(R.id.btn_un_select);
+
+        recyclerView.setPadding(0, toolbar.getHeight(), 0, 0);
 
     }
+
 
 
     //Oclick ItemCategoryAdapter
@@ -134,5 +214,34 @@ public class HomeActivity extends BaseActivity implements CategoryAdapterEvent {
         intent.putExtra("text", categories.get(pos).getText());
         startActivity(intent);
         overridePendingTransition(R.anim.in_right, R.anim.out_left);
+    }
+
+    @Override
+    public void onClickItemChoose(int pos) {
+        if (categories.get(pos).isChoose()) {
+            viewModel.setNumberSelect(--numberChoose);
+            viewModel.removeItemChoose(categories.get(pos).getId());
+        } else {
+            viewModel.addItemChoose(categories.get(pos).getId());
+            viewModel.setNumberSelect(++numberChoose);
+
+        }
+        categories.get(pos).setChoose(!categories.get(pos).isChoose());
+        categoryAdapter.notifyItemChanged(pos);
+    }
+
+    @Override
+    public void itemLongClick(int position) {
+        if (categoryAdapter.isChoose() == false) {
+            categoryAdapter.setChoose(true);
+            numberChoose = 1;
+            toolbar.setVisibility(View.VISIBLE);
+            recyclerView.setPadding(0, 154, 0, 0);
+            viewModel.setNumberSelect(numberChoose);
+            categories.get(position).setChoose(true);
+            categoryAdapter.notifyItemChanged(position);
+            viewModel.addItemChoose(categories.get(position).getId());
+            //TODO add event choose item
+        }
     }
 }

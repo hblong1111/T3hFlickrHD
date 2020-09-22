@@ -7,6 +7,7 @@ import android.graphics.Shader;
 import android.text.BoringLayout;
 import android.text.Html;
 import android.text.TextPaint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     private Context context;
     private List<Category> list;
     private CategoryAdapterEvent callback;
+    private boolean isChoose = false;
 
     public CategoryAdapter(Context context, List<Category> list, CategoryAdapterEvent callback) {
         this.context = context;
@@ -38,11 +40,22 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         this.callback = callback;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        if (list.get(position).isChoose()) {
+            return 1;
+        } else return 0;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.adapter_item_category, parent, false);
-
+        View view;
+        if (viewType == 0) {
+            view = LayoutInflater.from(context).inflate(R.layout.adapter_item_category, parent, false);
+        } else {
+            view = LayoutInflater.from(context).inflate(R.layout.adapter_item_category_choose, parent, false);
+        }
         return new ViewHolder(view);
     }
 
@@ -61,36 +74,41 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
                 .placeholder(R.drawable.place_category)
                 .into(holder.imgAvt);
 
-        holder.itemView.setOnClickListener(view -> callback.onClickItem(position));
-        setAnimationItemView(holder.itemView);
-        holder.itemView.setOnLongClickListener(view -> {
+        holder.itemView.setOnClickListener(view -> {
+            if (!isChoose) {
+                callback.onClickItem(position);
+            } else {
+                //TODO add event choose item
+                callback.onClickItemChoose(position);
+            }
+        });
+
+        //Animation for item
+        setAnimationItemView(holder.itemView, isChoose);
+
+        if (getItemViewType(position) == 1) {
             Animation animation = AnimationUtils.loadAnimation(context, R.anim.item_longclick);
             animation.setInterpolator(new LinearInterpolator());
-            holder.cardView.startAnimation(animation);
-            animation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
+            holder.cardSelect.startAnimation(animation);
+            Animation animation1 = AnimationUtils.loadAnimation(context, R.anim.item_longclick_select);
+            animation.setInterpolator(new LinearInterpolator());
+            holder.cardSelect1.startAnimation(animation1);
+        }
+        holder.itemView.setOnLongClickListener(view -> {
+            callback.itemLongClick(position);
 
-                }
 
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    holder.cardSelect.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
             return true;
         });
+
     }
 
-    private void setAnimationItemView(View itemView) {
-        Animation animation = AnimationUtils.loadAnimation(context, R.anim.item_zoom);
-        animation.setInterpolator(new LinearInterpolator());
-        itemView.startAnimation(animation);
+    private void setAnimationItemView(View itemView, boolean isChoose) {
+        if (isChoose == false) {
+            Animation animation = AnimationUtils.loadAnimation(context, R.anim.item_zoom);
+            animation.setInterpolator(new LinearInterpolator());
+            itemView.startAnimation(animation);
+        }
     }
 
     private String getTextHtml(Category category) {
@@ -112,24 +130,27 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         return list.size();
     }
 
+    public boolean isChoose() {
+        return isChoose;
+    }
+
+    public void setChoose(boolean choose) {
+        isChoose = choose;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView imgAvt;
         private TextView tvTitle;
         private CardView cardSelect;
-
-        private CardView cardView;
+        private CardView cardSelect1;
 
 
         public ViewHolder(@NonNull View itemView) {
-
-
             super(itemView);
             imgAvt = (ImageView) itemView.findViewById(R.id.img_avt);
             tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
-
-            cardSelect = itemView.findViewById(R.id.card_select);
-            cardView = itemView.findViewById(R.id.cardView);
-
+            cardSelect = itemView.findViewById(R.id.cardView);
+            cardSelect1 = itemView.findViewById(R.id.card_select);
 
         }
 

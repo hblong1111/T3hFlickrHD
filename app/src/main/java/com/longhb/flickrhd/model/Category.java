@@ -2,6 +2,7 @@ package com.longhb.flickrhd.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "category")
@@ -12,6 +13,8 @@ public class Category {
     private int w,h;
     @ColumnInfo(name = "is_system")
     private boolean isSystem;
+    @Ignore
+    private boolean isChoose=false;
 
 
     public Category(String title, String url, String text, int w, int h, boolean isSystem) {
@@ -21,6 +24,14 @@ public class Category {
         this.w = w;
         this.h = h;
         this.isSystem = isSystem;
+    }
+
+    public boolean isChoose() {
+        return isChoose;
+    }
+
+    public void setChoose(boolean choose) {
+        isChoose = choose;
     }
 
     public String getText() {

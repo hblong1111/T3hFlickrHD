@@ -34,12 +34,52 @@ public class HomeActivityViewModel extends ViewModel {
     private AlertDialog alertDialog;
     private LiveData<List<Category>> mListCategory;
     private LiveData<List<Category>> mListCategoryAdd  ;
+    private MutableLiveData<String> numberSelect=new MutableLiveData<>();
+    private MutableLiveData<List<Integer>> mutableLiveDataListIdItemSelect=new MutableLiveData<>();
 
+    private List<Integer> listIdItemChoose=new ArrayList<>();
 
     public HomeActivityViewModel(Application application) {
         this.imageRepository = new ImageRepository(application);
         this.mListCategory = imageRepository.getAllCategory();
         mListCategoryAdd = imageRepository.getAllCategoryAdd();
+    }
+
+    public List<Integer> getListIdItemChoose() {
+        return listIdItemChoose;
+    }
+
+    public void addItemChoose(int i){
+        listIdItemChoose.add(i);
+    }
+    public void removeItemChoose(int i){
+        listIdItemChoose.remove(listIdItemChoose.indexOf(i));
+    }
+
+
+    public void removeAllListChoose(){
+        listIdItemChoose.clear();
+    }
+    public void chooseAllItem(List<Integer> integers){
+        listIdItemChoose.addAll(integers);
+    }
+
+
+
+    public MutableLiveData<List<Integer>> getMutableLiveDataListIdItemSelect() {
+        return mutableLiveDataListIdItemSelect;
+    }
+
+    public void setMutableLiveDataListIdItemSelect(List<Integer> integers) {
+        this.mutableLiveDataListIdItemSelect.postValue(integers);
+    }
+
+    public MutableLiveData<String> getNumberSelect() {
+        return numberSelect;
+    }
+
+    public void setNumberSelect(int number) {
+        numberSelect.postValue(number+" mục được chọn");
     }
 
     public LiveData<List<Category>> getListCategory() {
