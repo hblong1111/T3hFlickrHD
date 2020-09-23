@@ -147,7 +147,7 @@ public class HomeActivity extends BaseActivity implements CategoryAdapterEvent {
             @Override
             public void onSwipeTop() {
                 super.onSwipeTop();
-                viewModel.openDialog(HomeActivity.this);
+                viewModel.openDialog(HomeActivity.this,DiscoverActivity.class);
             }
         });
     }
@@ -212,6 +212,7 @@ public class HomeActivity extends BaseActivity implements CategoryAdapterEvent {
     public void onClickItem(int pos) {
         Intent intent = new Intent(HomeActivity.this, ListImageActivity.class);
         intent.putExtra("text", categories.get(pos).getText());
+        intent.putExtra("title", categories.get(pos).getTitle());
         startActivity(intent);
         overridePendingTransition(R.anim.in_right, R.anim.out_left);
     }

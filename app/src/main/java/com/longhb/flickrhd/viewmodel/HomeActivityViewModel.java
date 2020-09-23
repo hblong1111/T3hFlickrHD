@@ -3,6 +3,7 @@ package com.longhb.flickrhd.viewmodel;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,11 +34,11 @@ public class HomeActivityViewModel extends ViewModel {
     private ImageRepository imageRepository;
     private AlertDialog alertDialog;
     private LiveData<List<Category>> mListCategory;
-    private LiveData<List<Category>> mListCategoryAdd  ;
-    private MutableLiveData<String> numberSelect=new MutableLiveData<>();
-    private MutableLiveData<List<Integer>> mutableLiveDataListIdItemSelect=new MutableLiveData<>();
+    private LiveData<List<Category>> mListCategoryAdd;
+    private MutableLiveData<String> numberSelect = new MutableLiveData<>();
+    private MutableLiveData<List<Integer>> mutableLiveDataListIdItemSelect = new MutableLiveData<>();
 
-    private List<Integer> listIdItemChoose=new ArrayList<>();
+    private List<Integer> listIdItemChoose = new ArrayList<>();
 
     public HomeActivityViewModel(Application application) {
         this.imageRepository = new ImageRepository(application);
@@ -49,21 +50,22 @@ public class HomeActivityViewModel extends ViewModel {
         return listIdItemChoose;
     }
 
-    public void addItemChoose(int i){
+    public void addItemChoose(int i) {
         listIdItemChoose.add(i);
     }
-    public void removeItemChoose(int i){
+
+    public void removeItemChoose(int i) {
         listIdItemChoose.remove(listIdItemChoose.indexOf(i));
     }
 
 
-    public void removeAllListChoose(){
+    public void removeAllListChoose() {
         listIdItemChoose.clear();
     }
-    public void chooseAllItem(List<Integer> integers){
+
+    public void chooseAllItem(List<Integer> integers) {
         listIdItemChoose.addAll(integers);
     }
-
 
 
     public MutableLiveData<List<Integer>> getMutableLiveDataListIdItemSelect() {
@@ -79,7 +81,7 @@ public class HomeActivityViewModel extends ViewModel {
     }
 
     public void setNumberSelect(int number) {
-        numberSelect.postValue(number+" mục được chọn");
+        numberSelect.postValue(number + " mục được chọn");
     }
 
     public LiveData<List<Category>> getListCategory() {
@@ -104,16 +106,16 @@ public class HomeActivityViewModel extends ViewModel {
         imageRepository.deleteCategory(id);
     }
 
-    public void openDialog(Activity activity) {
+    public void openDialog(Activity activity, Class aClass) {
         BottomSheetDialog dialog = new BottomSheetDialog(activity, R.style.BottomSheetDialogTheme);
         View view = LayoutInflater.from(activity).inflate(R.layout.bottom_sheet, activity.findViewById(R.id.contrain_layout));
         Button btnAddCategory;
-        Button btnMyCategory;
+        Button btnOpenDiscover;
         Button btnMyFavourite;
         Button btnCanlce;
 
         btnAddCategory = view.findViewById(R.id.btn_add_category);
-        btnMyCategory = view.findViewById(R.id.btn_my_category);
+        btnOpenDiscover = view.findViewById(R.id.btn_my_category);
         btnMyFavourite = view.findViewById(R.id.btn_my_favourite);
         btnCanlce = view.findViewById(R.id.btn_canlce);
 
@@ -121,6 +123,13 @@ public class HomeActivityViewModel extends ViewModel {
         btnAddCategory.setOnClickListener(view1 -> {
             dialog.dismiss();
             addCategory(activity);
+        });
+
+        btnOpenDiscover.setOnClickListener(view1 -> {
+            Intent intent = new Intent(activity, aClass);
+            activity.startActivity(intent);
+            activity.overridePendingTransition(R.anim.in_right, R.anim.out_left);
+            dialog.dismiss();
         });
         dialog.setCancelable(false);
         dialog.setContentView(view);

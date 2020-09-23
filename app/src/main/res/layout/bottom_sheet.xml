@@ -31,7 +31,7 @@
         android:layout_marginBottom="1dp"
         android:background="@drawable/bg_btn_button_center"
         android:paddingVertical="16dp"
-        android:text="Chủ đề của tôi"
+        android:text="Khám Phá"
         android:textAllCaps="false"
         android:textColor="#3E94FD"
         android:textSize="20sp" />
