@@ -26,6 +26,9 @@ public class MyViewModelFactory implements ViewModelProvider.Factory {
         }else
         if (modelClass.isAssignableFrom(DetailViewModel.class) ){
             return (T) new DetailViewModel(application,mActivity);
+        }else
+        if (modelClass.isAssignableFrom(ImagesFavouriteViewModel.class) ){
+            return (T) new ImagesFavouriteViewModel(application,mActivity);
         }
         return (T) new HomeActivityViewModel(application);
     }

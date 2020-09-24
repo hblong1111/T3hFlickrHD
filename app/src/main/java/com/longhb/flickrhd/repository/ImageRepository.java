@@ -44,11 +44,11 @@ public class ImageRepository {
 
 
     //Image local
-    public void insertImage(Image image) {
-        imageDao.insertImage(image);
+    public long insertImage(Image image) {
+        return imageDao.insertImage(image);
     }
 
-    public void deleteImage(int id) {
+    public void deleteImage(String id) {
         imageDao.deleteImage(id);
     }
 

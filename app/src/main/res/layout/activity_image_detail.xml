@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,4 +16,47 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/multiple_actions_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:fab_labelStyle="@style/LableButtonAction"
+        app:layout_constraintEnd_toEndOf="parent"
+        fab:fab_addButtonColorNormal="#DA4336"
+        fab:fab_addButtonColorPressed="#DA4336"
+        fab:fab_addButtonPlusIconColor="#FFFFFF"
+        fab:fab_addButtonSize="normal"
+        fab:fab_addButtonStrokeVisible="false"
+        fab:fab_expandDirection="up">
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            app:fab_icon="@drawable/ic_favourite"
+            app:fab_title="Yêu thích"
+            fab:fab_colorNormal="#DA4336"
+            fab:fab_colorPressed="#80DA4336" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_title="Tải xuống"
+            app:fab_icon="@drawable/ic_download"
+            fab:fab_colorNormal="#DA4336"
+            fab:fab_colorPressed="#80DA4336" />
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_title="Đặt hình nền"
+            app:fab_icon="@drawable/ic_setup_wallpaper"
+            fab:fab_colorNormal="#DA4336"
+            fab:fab_colorPressed="#80DA4336" />
+
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 </androidx.constraintlayout.widget.ConstraintLayout>

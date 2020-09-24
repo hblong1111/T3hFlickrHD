@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/contrain_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00FFFFFF"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+
+    <Button
+        android:id="@+id/btn_add_favourite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/bg_btn_button_top"
+        android:paddingVertical="16dp"
+        android:text="Thêm vào Yêu thích"
+        android:textAllCaps="false"
+        android:textColor="#3E94FD"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/btn_set_wall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/bg_btn_button_center"
+        android:paddingVertical="16dp"
+        android:text="Đặt hình nền"
+        android:textAllCaps="false"
+        android:textColor="#3E94FD"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/btn_download"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/bg_btn_button_center"
+        android:paddingVertical="16dp"
+        android:text="Download ảnh"
+        android:textAllCaps="false"
+        android:textColor="#3E94FD"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/btn_home"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/bg_btn_button_bottom"
+        android:paddingVertical="16dp"
+        android:text="Trang chủ"
+        android:textAllCaps="false"
+        android:textColor="#3E94FD"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/btn_canlce"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="1dp"
+        android:background="@drawable/bg_btn_button"
+        android:paddingVertical="16dp"
+        android:text="Quay lại"
+        android:textAllCaps="false"
+        android:textColor="#3E94FD"
+        android:textSize="20sp" />
+</LinearLayout>

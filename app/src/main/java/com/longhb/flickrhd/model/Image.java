@@ -3,17 +3,21 @@ package com.longhb.flickrhd.model;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 
 @Entity(tableName = "favourite")
 public class Image implements Serializable {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-    private int height,with;
+    @NotNull
+    @PrimaryKey
+    private String id;
+    private int height, with;
     private int h_o;
-    private String url,views,url_o;
+    private String url, views, url_o;
 
-    public Image(int height, int with, int h_o, String url, String views, String url_o) {
+    public Image(String id, int height, int with, int h_o, String url, String views, String url_o) {
+        this.id = id;
         this.height = height;
         this.with = with;
         this.h_o = h_o;
@@ -30,12 +34,8 @@ public class Image implements Serializable {
         this.h_o = h_o;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getHeight() {

@@ -99,7 +99,6 @@ public class DiscoverActivity extends AppCompatActivity implements ImageAdapterE
                 page++;
                 viewModel.setmPage(page);
                 viewModel.getAllImageNetwork(perPage, page, text);
-                Log.e("longhbs", "loadmore" + page + "|");
             }
         });
     }
@@ -159,8 +158,8 @@ public class DiscoverActivity extends AppCompatActivity implements ImageAdapterE
                 if (isShowSearch) {
                     tvTitle.setVisibility(View.VISIBLE);
                     group.setVisibility(View.GONE);
-                    String txtInput=edtSearch.getText().toString();
-                    if (txtInput!=null&&!txtInput.trim().equals("")&&!txtInput.equals(text)){
+                    String txtInput = edtSearch.getText().toString();
+                    if (txtInput != null && !txtInput.trim().equals("") && !txtInput.equals(text)) {
                         text = txtInput;
                         page = 1;
                         viewModel.setmPage(page);
@@ -170,7 +169,7 @@ public class DiscoverActivity extends AppCompatActivity implements ImageAdapterE
                     }
 
                     //Ẩn bàn phím
-                    InputMethodManager imm =  (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 } else {
                     tvTitle.setVisibility(View.GONE);
@@ -183,4 +182,6 @@ public class DiscoverActivity extends AppCompatActivity implements ImageAdapterE
                 break;
         }
     }
+
+
 }

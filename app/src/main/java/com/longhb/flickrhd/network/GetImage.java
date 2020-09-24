@@ -246,7 +246,7 @@ public class GetImage {
                     url_o = url;
                     hO=h;
                 }
-                return new Image(h, w, hO,url, getViews(), url_o);
+                return new Image(getId(),h, w, hO,url, getViews(), url_o);
             }
 
             public Category getCategory(boolean isSystem,String title,String text) {

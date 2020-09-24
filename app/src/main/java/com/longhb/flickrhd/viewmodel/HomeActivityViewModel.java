@@ -22,6 +22,7 @@ import com.longhb.flickrhd.model.Category;
 import com.longhb.flickrhd.model.Image;
 import com.longhb.flickrhd.network.GetImage;
 import com.longhb.flickrhd.repository.ImageRepository;
+import com.longhb.flickrhd.ui.ImagesFavouriteActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -131,10 +132,16 @@ public class HomeActivityViewModel extends ViewModel {
             activity.overridePendingTransition(R.anim.in_right, R.anim.out_left);
             dialog.dismiss();
         });
+        btnMyFavourite.setOnClickListener(view1 -> {
+            dialog.dismiss();
+            activity.startActivity(new Intent(activity, ImagesFavouriteActivity.class));
+            activity.overridePendingTransition(R.anim.in_right,R.anim.out_left);
+        });
         dialog.setCancelable(false);
         dialog.setContentView(view);
         dialog.show();
     }
+
 
     private void addCategory(Activity context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.CustomDialog);

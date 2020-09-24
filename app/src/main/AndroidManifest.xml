@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.longhb.flickrhd">
-
+    <uses-permission android:name="android.permission.SET_WALLPAPER"/>
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -17,8 +17,8 @@
 
         </activity>
         <activity android:name=".ui.SplashActivity" />
+        <activity android:name=".ui.ImagesFavouriteActivity" />
         <activity android:name=".ui.HomeActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
