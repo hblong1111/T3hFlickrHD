@@ -36,7 +36,7 @@
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onClick"
+            android:id="@+id/btn_action_add_favourite"
             app:fab_icon="@drawable/ic_favourite"
             app:fab_title="Yêu thích"
             fab:fab_colorNormal="#DA4336"
@@ -46,6 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:fab_title="Tải xuống"
+            android:id="@+id/btn_action_download"
             app:fab_icon="@drawable/ic_download"
             fab:fab_colorNormal="#DA4336"
             fab:fab_colorPressed="#80DA4336" />
@@ -54,6 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:fab_title="Đặt hình nền"
+            android:id="@+id/btn_action_set_wall"
             app:fab_icon="@drawable/ic_setup_wallpaper"
             fab:fab_colorNormal="#DA4336"
             fab:fab_colorPressed="#80DA4336" />

@@ -1,27 +1,49 @@
 package com.longhb.flickrhd.ui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.viewpager.widget.ViewPager;
 
+import android.Manifest;
+import android.app.Notification;
+import android.app.WallpaperManager;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.longhb.flickrhd.App;
 import com.longhb.flickrhd.R;
 import com.longhb.flickrhd.adpater.ImageDetailAdapterViewPager;
 import com.longhb.flickrhd.databinding.ActivityImageDetailBinding;
 import com.longhb.flickrhd.model.Image;
 import com.longhb.flickrhd.viewmodel.DetailViewModel;
 import com.longhb.flickrhd.viewmodel.MyViewModelFactory;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ImageDetailActivity extends AppCompatActivity {
+public class ImageDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final int EXTERNAL_STORAGE_PERMISSION_CONSTANT = 100;
     private ActivityImageDetailBinding binding;
 
     private List<Image> images;
@@ -30,14 +52,24 @@ public class ImageDetailActivity extends AppCompatActivity {
 
     public DetailViewModel viewModel;
 
+    private Image imageCur;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityImageDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
+        setOnClick();
         createData();
+    }
+
+
+    private void setOnClick() {
+        binding.btnActionAddFavourite.setOnClickListener(this);
+        binding.btnActionDownload.setOnClickListener(this);
+        binding.btnActionSetWall.setOnClickListener(this);
+        binding.multipleActionsLeft.setOnClickListener(this);
     }
 
     private void createData() {
@@ -68,12 +100,186 @@ public class ImageDetailActivity extends AppCompatActivity {
     }
 
 
+    @Override
     public void onClick(View view) {
-      long insert=  viewModel.insertImageFavourite(images.get(binding.viewPager.getCurrentItem()));
-      if (insert>=0){
-          Toast.makeText(this, "Thêm ảnh vào danh sách yêu thích!", Toast.LENGTH_SHORT).show();
-      }else {
-          Toast.makeText(this, "Gặp lỗi khi thêm ảnh vào danh sách yêu thích", Toast.LENGTH_SHORT).show();
-      }
+        Image image = images.get(binding.viewPager.getCurrentItem());
+        imageCur = image;
+        switch (view.getId()) {
+            case R.id.btn_action_add_favourite:
+                addImageToFavourite(image);
+                break;
+
+            case R.id.btn_action_set_wall:
+                new SetWallPaperTask().execute(image.getUrl_o());
+                break;
+            case R.id.btn_action_download:
+                downloadImage(image);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private void addImageToFavourite(Image image) {
+        long insert = viewModel.insertImageFavourite(image);
+        if (insert >= 0) {
+            Toast.makeText(this, "Thêm ảnh vào danh sách yêu thích!", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Gặp lỗi khi thêm ảnh vào danh sách yêu thích", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void downloadImage(Image image) {
+        Log.e("longhbs", "pess: " + ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) + "|" + ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE));
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, EXTERNAL_STORAGE_PERMISSION_CONSTANT);
+        } else {
+            new DownloadImageTask().execute(new String[]{image.getUrl_o(), image.getId()});
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == EXTERNAL_STORAGE_PERMISSION_CONSTANT) {
+            Log.e("longhbs", grantResults[0] + "|" + grantResults[1]);
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                new DownloadImageTask().execute(new String[]{imageCur.getUrl_o(), imageCur.getId()});
+            }
+        }
+    }
+
+    class DownloadImageTask extends AsyncTask<String, Integer, Void> {
+        NotificationManagerCompat notificationManager;
+        NotificationCompat.Builder builder;
+        private int notificationId = 99;
+        String fileName;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            notificationManager = NotificationManagerCompat.from(getApplicationContext());
+            builder = new NotificationCompat.Builder(getApplicationContext(), App.CHANNEL_ID);
+            builder.setContentTitle("Chuẩn bị ...")
+                    .setContentText("Đang chờ")
+                    .setSmallIcon(R.drawable.ic_download)
+                    .setPriority(NotificationCompat.PRIORITY_LOW);
+            int PROGRESS_MAX = 100;
+            int PROGRESS_CURRENT = 0;
+            builder.setProgress(PROGRESS_MAX, PROGRESS_CURRENT, false);
+            notificationManager.notify(notificationId, builder.build());
+
+
+        }
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            try {
+                URL url = new URL(strings[0]);
+                //create the new connection
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                //set up some things on the connection
+                urlConnection.setRequestMethod("GET");
+                //and connect!
+                urlConnection.connect();
+                //set the path where we want to save the file in this case, going to save it on the root directory of the sd card.
+                File SDCardRoot = Environment.getExternalStorageDirectory();
+                Log.i("longhbs", "SDCard: " + SDCardRoot.exists());
+                //create a new file, specifying the path, and the filename which we want to save the file as.
+                File file = new File(SDCardRoot, "Flickr HD-" + strings[1] + ".jpg");
+                fileName = file.getName();
+                if (file.exists()) {
+                    file.mkdirs();
+                    file.createNewFile();
+                }
+                //this will be used to write the downloaded data into the file we created
+                FileOutputStream fileOutput = new FileOutputStream(file);
+                //this will be used in reading the data from the internet
+                InputStream inputStream = urlConnection.getInputStream();
+                //this is the total size of the file
+                int totalSize = urlConnection.getContentLength();
+                //variable to store total downloaded bytes
+                int downloadedSize = 0;
+                byte[] buffer = new byte[1024];
+                int bufferLength = 0; //used to store a temporary size of the buffer
+                //now, read through the input buffer and write the contents to the file
+                while ((bufferLength = inputStream.read(buffer)) > 0) {
+                    //add the data in the buffer to the file in the file output stream (the file on the sd card
+                    fileOutput.write(buffer, 0, bufferLength);
+                    //add up the size so we know how much is downloaded
+                    downloadedSize += bufferLength;
+                    //this is where you would do something to report the prgress, like this maybe
+                    //updateProgress(downloadedSize, totalSize);
+                    publishProgress((downloadedSize * 100) / totalSize);
+                }
+
+                fileOutput.close();
+                inputStream.close();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                Log.e("longhbs", e.getMessage());
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+                Log.e("longhbs", e.getMessage());
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.e("longhbs", e.getMessage());
+
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            builder.setContentTitle("Đang tải ...")
+                    .setContentText(values[0] + "%")
+                    .setProgress(100, values[0], false);
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            builder.setContentTitle("Tải xuống hoàn tất!")
+                    .setContentText(fileName)
+                    .setProgress(0, 0, false);
+            notificationManager.notify(notificationId, builder.build());
+        }
+    }
+
+    class SetWallPaperTask extends AsyncTask<String, Void, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(String... strings) {
+            Bitmap result = null;
+            try {
+                result = Picasso.get()
+                        .load(strings[0])
+                        .get();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            WallpaperManager wallpaperManager = WallpaperManager.getInstance(ImageDetailActivity.this);
+            try {
+                wallpaperManager.setBitmap(bitmap);
+                Toast.makeText(ImageDetailActivity.this, "Ok", Toast.LENGTH_SHORT).show();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
+        }
     }
 }
