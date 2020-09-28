@@ -13,6 +13,7 @@
 
     <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@color/bg_bottom_sheet</item>
+
     </style>
     <style name="LableButtonAction" >
         <item name="android:background">@drawable/bg_lable</item>
@@ -23,6 +24,11 @@
 
     </style>
     <style name="CustomDialog" parent="android:Theme.Dialog">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+    <style name="CustomDialog1" parent="android:Theme.Material.Dialog.Alert">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>

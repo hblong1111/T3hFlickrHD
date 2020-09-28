@@ -57,7 +57,7 @@ public class ImagesFavouriteActivity extends AppCompatActivity implements ImageA
     }
 
     private void setupSwipRecycler() {
-        ItemTouchHelper.SimpleCallback callback=new ItemTouchHelper.SimpleCallback(ItemTouchHelper.ACTION_STATE_SWIPE,ItemTouchHelper.RIGHT) {
+        ItemTouchHelper.SimpleCallback callback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.ACTION_STATE_SWIPE, ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
@@ -65,12 +65,12 @@ public class ImagesFavouriteActivity extends AppCompatActivity implements ImageA
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                Image image=images.get(viewHolder.getAdapterPosition());
+                Image image = images.get(viewHolder.getAdapterPosition());
                 viewModel.deleteImageFavourite(image.getId());
                 adapter.notifyDataSetChanged();
             }
         };
-        ItemTouchHelper itemTouchHelper=new ItemTouchHelper(callback);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
         itemTouchHelper.attachToRecyclerView(recyclerView2);
     }
 
@@ -115,9 +115,13 @@ public class ImagesFavouriteActivity extends AppCompatActivity implements ImageA
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        if (isTaskRoot()) {
+            startActivity(new Intent(ImagesFavouriteActivity.this, HomeActivity.class));
+            finish();
+        } else {
+            super.onBackPressed();
+        }
         overridePendingTransition(R.anim.in_left, R.anim.out_right);
-        finish();
     }
 
     @Override

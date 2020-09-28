@@ -52,12 +52,7 @@ public class ImageDetailFaragment extends Fragment {
         }
         Glide.with(getContext()).load(image.getUrl_o()).placeholder(R.drawable.place_image_detail).into(photoView);
 
-        photoView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View view, int i, int i1, int i2, int i3) {
-                Log.e("longhbs", i + "|" + i2 + "|" + i3);
-            }
-        });
+
 
         return view;
     }

@@ -8,18 +8,33 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.WallpaperManager;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.Html;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.RemoteViews;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.longhb.flickrhd.App;
 import com.longhb.flickrhd.R;
 import com.longhb.flickrhd.adpater.ImageDetailAdapterViewPager;
@@ -70,6 +85,8 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
         binding.btnActionDownload.setOnClickListener(this);
         binding.btnActionSetWall.setOnClickListener(this);
         binding.multipleActionsLeft.setOnClickListener(this);
+        binding.btnMore.setOnClickListener(this);
+        binding.btnComment.setOnClickListener(this);
     }
 
     private void createData() {
@@ -115,10 +132,60 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
             case R.id.btn_action_download:
                 downloadImage(image);
                 break;
-
-            default:
+            case R.id.btn_more:
+                openPopupMenu();
+                break;
+            case R.id.btn_comment:
+                showDialogComment();
                 break;
         }
+    }
+
+    private void showDialogComment() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.CustomDialog1);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_comment, null);
+
+
+        EditText editText = view.findViewById(R.id.editTextTextPersonName2);
+        Button  button = view.findViewById(R.id.button);
+        button.setOnClickListener( view1 -> {
+            String data = editText.getText().toString();
+            WebView browser = (WebView) view.findViewById(R.id.webview);
+            browser.getSettings().setJavaScriptEnabled(true);
+            browser.loadData(data, "text/html", "UTF-8");
+        });
+        dialog.setView(view);
+        dialog.create();
+        dialog.show();
+    }
+
+    private void openPopupMenu() {
+        PopupMenu popupMenu = new PopupMenu(this, binding.btnMore);
+        popupMenu.getMenuInflater().inflate(R.menu.menu_popup, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+            Intent intent = null;
+            switch (menuItem.getItemId()) {
+                case R.id.popup_item_home:
+                    intent = new Intent(ImageDetailActivity.this, HomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.in_left, R.anim.out_right);
+                    break;
+                case R.id.popup_item_favourite:
+                    intent = new Intent(ImageDetailActivity.this, ImagesFavouriteActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.in_left, R.anim.out_right);
+                    break;
+                case R.id.popup_item_about:
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/longhb132"));
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.in_left, R.anim.out_right);
+                    break;
+            }
+            return false;
+        });
+        popupMenu.show();
     }
 
     private void addImageToFavourite(Image image) {

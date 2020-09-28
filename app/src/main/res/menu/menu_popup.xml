@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/popup_item_home"
+        android:title="Trang Chủ" />
+    <item
+        android:id="@+id/popup_item_favourite"
+        android:title="D.S Yêu thích" />
+    <item
+        android:id="@+id/popup_item_about"
+        android:title="Giới Thiệu" />
+</menu>

@@ -137,6 +137,7 @@ public class DiscoverActivity extends AppCompatActivity implements ImageAdapterE
 
     @Override
     public void onItemImageClick(int position) {
+        Log.e("longhbs","id :"+images.get(position).getId());
         Intent intent = new Intent(DiscoverActivity.this, ImageDetailActivity.class);
         intent.putExtra(Const.KEY_INTENT_LIST_IMAGE, (Serializable) images);
         intent.putExtra(Const.KEY_INTENT_LIST_IMAGE_POS, position);

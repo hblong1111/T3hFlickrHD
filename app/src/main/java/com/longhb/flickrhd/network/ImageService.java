@@ -1,5 +1,6 @@
 package com.longhb.flickrhd.network;
 
+import io.reactivex.rxjava3.core.Observable;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -17,4 +18,16 @@ public interface ImageService {
             @Query("format") String format,
             @Query("nojsoncallback") String nojsoncallback
     );
+
+
+    @GET("services/rest")
+    Observable<GetComment> getAllComment(
+            @Query("method") String method,
+            @Query("api_key") String api_key,
+            @Query("photo_id") String photo_id,
+            @Query("format") String format,
+            @Query("nojsoncallback") String nojsoncallback
+    );
+
+
 }
