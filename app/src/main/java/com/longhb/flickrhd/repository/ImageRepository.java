@@ -90,7 +90,7 @@ public class ImageRepository {
     
     //Comment
     
-    public Observable<GetComment> getCommentForImage(String photoId){
+    public Call<GetComment> getCommentForImage(String photoId){
         return imageService.getAllComment(METHOD_GET_COMMENT,Const.KEY_TOKEN,photoId,"json","1");
     }
 

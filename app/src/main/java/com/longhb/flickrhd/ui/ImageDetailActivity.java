@@ -6,6 +6,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -28,6 +30,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.RemoteViews;
 import android.widget.TextView;
@@ -37,8 +40,10 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.longhb.flickrhd.App;
 import com.longhb.flickrhd.R;
+import com.longhb.flickrhd.adpater.CommentAdapter;
 import com.longhb.flickrhd.adpater.ImageDetailAdapterViewPager;
 import com.longhb.flickrhd.databinding.ActivityImageDetailBinding;
+import com.longhb.flickrhd.model.Comment;
 import com.longhb.flickrhd.model.Image;
 import com.longhb.flickrhd.viewmodel.DetailViewModel;
 import com.longhb.flickrhd.viewmodel.MyViewModelFactory;
@@ -60,14 +65,18 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
 
     private static final int EXTERNAL_STORAGE_PERMISSION_CONSTANT = 100;
     private ActivityImageDetailBinding binding;
+    private AlertDialog alertDialog;
 
     private List<Image> images;
+    private List<Comment> comments;
     private int pos = -1;
     private ImageDetailAdapterViewPager adapterViewPager;
+    private CommentAdapter commentAdapter;
 
     public DetailViewModel viewModel;
 
     private Image imageCur;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,9 +101,15 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
     private void createData() {
         viewModel = ViewModelProviders.of(this, new MyViewModelFactory(getApplication(), this, "")).get(DetailViewModel.class);
         images = new ArrayList<>();
-
+        comments = new ArrayList<>();
+        commentAdapter = new CommentAdapter(this, comments);
 
         viewModel.getmListImage().observe(this, images1 -> settingViewPager(images1));
+        viewModel.getComments().observe(this, comments1 -> {
+            comments.clear();
+            comments.addAll(comments1);
+            commentAdapter.notifyDataSetChanged();
+        });
     }
 
     private void settingViewPager(List<Image> images1) {
@@ -136,27 +151,30 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
                 openPopupMenu();
                 break;
             case R.id.btn_comment:
-                showDialogComment();
+                showDialogComment(image.getId());
                 break;
         }
     }
 
-    private void showDialogComment() {
+    private void showDialogComment(String id) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.CustomDialog1);
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_comment, null);
 
+        ImageButton btnColse;
+        RecyclerView rvComment;
 
-        EditText editText = view.findViewById(R.id.editTextTextPersonName2);
-        Button  button = view.findViewById(R.id.button);
-        button.setOnClickListener( view1 -> {
-            String data = editText.getText().toString();
-            WebView browser = (WebView) view.findViewById(R.id.webview);
-            browser.getSettings().setJavaScriptEnabled(true);
-            browser.loadData(data, "text/html", "UTF-8");
-        });
+        btnColse = view.findViewById(R.id.btn_colse);
+        rvComment = view.findViewById(R.id.rv_comment);
+
+        btnColse.setOnClickListener(view1 -> alertDialog.dismiss());
+
+        rvComment.setAdapter(commentAdapter);
+        rvComment.setLayoutManager(new LinearLayoutManager(this));
+
         dialog.setView(view);
         dialog.create();
-        dialog.show();
+        alertDialog = dialog.show();
+        viewModel.getAllCommentNetwork(id);
     }
 
     private void openPopupMenu() {
@@ -198,7 +216,6 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void downloadImage(Image image) {
-        Log.e("longhbs", "pess: " + ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) + "|" + ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE));
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
                 || ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED

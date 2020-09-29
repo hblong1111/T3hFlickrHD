@@ -12,7 +12,10 @@ public class ImageClient {
 
     public static Retrofit getInstance(String baseUrl) {
         if (INSTANCE == null) {
-            INSTANCE = new Retrofit.Builder().baseUrl(baseUrl).addConverterFactory(GsonConverterFactory.create()).build();
+            INSTANCE = new Retrofit.Builder()
+                    .baseUrl(baseUrl)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
         }
         return INSTANCE;
     }

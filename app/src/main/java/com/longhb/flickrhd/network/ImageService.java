@@ -21,7 +21,7 @@ public interface ImageService {
 
 
     @GET("services/rest")
-    Observable<GetComment> getAllComment(
+    Call<GetComment> getAllComment(
             @Query("method") String method,
             @Query("api_key") String api_key,
             @Query("photo_id") String photo_id,
