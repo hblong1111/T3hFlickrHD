@@ -60,7 +60,7 @@ public class DetailViewModel extends ViewModel {
             @Override
             public void onResponse(Call<GetComment> call, Response<GetComment> response) {
                 List<Comment> comments = new ArrayList<>();
-                if (response.body().comments.comment.size() != 0) {
+                if (response.isSuccessful()&&response.body().comments.comment != null) {
                     for (int i = 0; i < response.body().comments.comment.size(); i++) {
                         GetComment.Comments.Comment_ comment_ = response.body().comments.comment.get(i);
                         if (comment_.getComment() != null) {
