@@ -94,6 +94,7 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
         binding.btnActionDownload.setOnClickListener(this);
         binding.btnActionSetWall.setOnClickListener(this);
         binding.multipleActionsLeft.setOnClickListener(this);
+        binding.btnActionAddShare.setOnClickListener(this);
         binding.btnMore.setOnClickListener(this);
         binding.btnComment.setOnClickListener(this);
     }
@@ -153,7 +154,18 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
             case R.id.btn_comment:
                 showDialogComment(image.getId());
                 break;
+            case R.id.btn_action_add_share:
+                shareLinkImage(image.getUrl_o());
+                break;
         }
+    }
+
+    private void shareLinkImage(String url_o) {
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("text/plain");
+        i.putExtra(Intent.EXTRA_SUBJECT, "Sharing URL");
+        i.putExtra(Intent.EXTRA_TEXT, url_o);
+        startActivity(Intent.createChooser(i, "Chia sẻ"));
     }
 
     private void showDialogComment(String id) {
