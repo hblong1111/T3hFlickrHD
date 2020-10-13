@@ -1,40 +1,25 @@
 package com.longhb.flickrhd.ui;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.Group;
-import androidx.core.widget.AutoScrollHelper;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewTreeObserver;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.AbsListView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.longhb.flickrhd.BaseActivity;
 import com.longhb.flickrhd.R;
 import com.longhb.flickrhd.adpater.CategoryAdapter;
+import com.longhb.flickrhd.databinding.ActivityMainBinding;
 import com.longhb.flickrhd.model.Category;
 import com.longhb.flickrhd.network.GetImage;
 import com.longhb.flickrhd.util.CategoryAdapterEvent;
 import com.longhb.flickrhd.util.Const;
-import com.longhb.flickrhd.util.EndlessRecyclerViewScrollListener;
 import com.longhb.flickrhd.util.OnSwipeTouchListener;
 import com.longhb.flickrhd.viewmodel.HomeActivityViewModel;
 import com.longhb.flickrhd.viewmodel.MyViewModelFactory;
@@ -48,18 +33,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HomeActivity extends BaseActivity implements CategoryAdapterEvent {
-
-    private RecyclerView recyclerView;
-    private TextView tvBottomSheet;
-    private ConstraintLayout ct;
-    private ConstraintLayout toolbar;
-    private ImageButton btnClose;
-    private TextView tvNumberSelect;
-    private ImageButton btnDelete;
-    private ImageButton btnSelectAll;
-    private ImageButton btnUnSelect;
-
-
+    private ActivityMainBinding binding;
     private HomeActivityViewModel viewModel;
     private List<Category> categories;
     private CategoryAdapter categoryAdapter;
@@ -71,7 +45,8 @@ public class HomeActivity extends BaseActivity implements CategoryAdapterEvent {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         initView();
 
         createData();
@@ -85,15 +60,15 @@ public class HomeActivity extends BaseActivity implements CategoryAdapterEvent {
     }
 
     private void settingTollbar() {
-        btnDelete.setOnClickListener(view -> {
+        binding.btnDelete.setOnClickListener(view -> {
             btnDeleteClick();
         });
 
-        btnSelectAll.setOnClickListener(view -> btnSelectAllClick());
+        binding.btnSelectAll.setOnClickListener(view -> btnSelectAllClick());
 
-        btnUnSelect.setOnClickListener(view -> btnUnSelectClick());
+        binding.btnUnSelect.setOnClickListener(view -> btnUnSelectClick());
 
-        btnClose.setOnClickListener(view -> btnCloseClick());
+        binding.btnClose.setOnClickListener(view -> btnCloseClick());
     }
 
     private void btnUnSelectClick() {
@@ -121,12 +96,12 @@ public class HomeActivity extends BaseActivity implements CategoryAdapterEvent {
     private void btnCloseClick() {
 
         categoryAdapter.setChoose(false);
-        Log.e("longhbs","close");
-        toolbar.setVisibility(View.GONE);
-        recyclerView.setPadding(0,0,0,0);
+        Log.e("longhbs", "close");
+        binding.toolbar.setVisibility(View.GONE);
+        binding.recyclerView.setPadding(0, 0, 0, 0);
         viewModel.getListIdItemChoose().clear();
         for (int i = 0; i < categories.size(); i++) {
-            if (categories.get(i).isChoose()){
+            if (categories.get(i).isChoose()) {
                 categories.get(i).setChoose(false);
                 categoryAdapter.notifyItemChanged(i);
             }
@@ -143,19 +118,19 @@ public class HomeActivity extends BaseActivity implements CategoryAdapterEvent {
     }
 
     private void openBottomSheet() {
-        tvBottomSheet.setOnTouchListener(new OnSwipeTouchListener(this) {
+        binding.tvBottomSheet.setOnTouchListener(new OnSwipeTouchListener(this) {
             @Override
             public void onSwipeTop() {
                 super.onSwipeTop();
-                viewModel.openDialog(HomeActivity.this,DiscoverActivity.class);
+                viewModel.openDialog(HomeActivity.this, DiscoverActivity.class);
             }
         });
     }
 
 
     private void settingRecyclerView() {
-        recyclerView.setAdapter(categoryAdapter);
-        recyclerView.setLayoutManager(manager);
+        binding.recyclerView.setAdapter(categoryAdapter);
+        binding.recyclerView.setLayoutManager(manager);
     }
 
     private void createData() {
@@ -187,24 +162,12 @@ public class HomeActivity extends BaseActivity implements CategoryAdapterEvent {
         });
 
         //Listener event choose number change
-        viewModel.getNumberSelect().observe(this, s -> tvNumberSelect.setText(s));
+        viewModel.getNumberSelect().observe(this, s -> binding.tvNumberSelect.setText(s));
     }
 
     private void initView() {
-        recyclerView = findViewById(R.id.recyclerView);
-        tvBottomSheet = findViewById(R.id.tv_bottom_sheet);
-        ct = findViewById(R.id.ct);
-        toolbar = findViewById(R.id.toolbar);
-        btnClose = findViewById(R.id.btn_close);
-        tvNumberSelect = findViewById(R.id.tv_number_select);
-        btnDelete = findViewById(R.id.btn_delete);
-        btnSelectAll = findViewById(R.id.btn_select_all);
-        btnUnSelect = findViewById(R.id.btn_un_select);
-
-        recyclerView.setPadding(0, toolbar.getHeight(), 0, 0);
-
+        binding.recyclerView.setPadding(0, binding.toolbar.getHeight(), 0, 0);
     }
-
 
 
     //Oclick ItemCategoryAdapter
@@ -236,8 +199,8 @@ public class HomeActivity extends BaseActivity implements CategoryAdapterEvent {
         if (categoryAdapter.isChoose() == false) {
             categoryAdapter.setChoose(true);
             numberChoose = 1;
-            toolbar.setVisibility(View.VISIBLE);
-            recyclerView.setPadding(0, 154, 0, 0);
+            binding.toolbar.setVisibility(View.VISIBLE);
+            binding.recyclerView.setPadding(0, 154, 0, 0);
             viewModel.setNumberSelect(numberChoose);
             categories.get(position).setChoose(true);
             categoryAdapter.notifyItemChanged(position);

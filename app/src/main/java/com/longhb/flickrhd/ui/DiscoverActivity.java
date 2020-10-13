@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -23,6 +20,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.longhb.flickrhd.R;
 import com.longhb.flickrhd.adpater.ImageAdapter;
+import com.longhb.flickrhd.databinding.ActivityDiscoverBinding;
 import com.longhb.flickrhd.model.Image;
 import com.longhb.flickrhd.util.Const;
 import com.longhb.flickrhd.util.EndlessRecyclerViewScrollListener;
@@ -36,12 +34,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class DiscoverActivity extends AppCompatActivity implements ImageAdapterEvent, View.OnClickListener {
-    private RecyclerView recyclerView2;
-    private TextView tvTitle;
-    private ImageButton btnSearch;
-    private EditText edtSearch;
-    private ImageButton btnClearText;
-    private Group group;
+    private ActivityDiscoverBinding binding;
 
 
     private List<Image> images;
@@ -60,7 +53,8 @@ public class DiscoverActivity extends AppCompatActivity implements ImageAdapterE
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_discover);
+        binding = ActivityDiscoverBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         initView();
 
@@ -85,14 +79,14 @@ public class DiscoverActivity extends AppCompatActivity implements ImageAdapterE
     }
 
     private void settingRecyclerView() {
-        recyclerView2.setAdapter(adapter);
-        recyclerView2.setLayoutManager(staggeredGridLayoutManager);
+        binding.recyclerView.setAdapter(adapter);
+        binding.recyclerView.setLayoutManager(staggeredGridLayoutManager);
 
         addLoadMore();
     }
 
     private void addLoadMore() {
-        recyclerView2.addOnScrollListener(new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
+        binding.recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
             @Override
             public void onLoadMore(int p, int totalItemsCount, RecyclerView view) {
                 isLodeMore = true;
@@ -116,15 +110,8 @@ public class DiscoverActivity extends AppCompatActivity implements ImageAdapterE
     }
 
     private void initView() {
-        recyclerView2 = findViewById(R.id.recyclerView2);
-        tvTitle = findViewById(R.id.textView6);
-        btnSearch = findViewById(R.id.btn_search);
-        edtSearch = findViewById(R.id.edt_search);
-        btnClearText = findViewById(R.id.btn_clear_text);
-        group = findViewById(R.id.group);
-
-        btnClearText.setOnClickListener(this);
-        btnSearch.setOnClickListener(this);
+        binding.btnClearText.setOnClickListener(this);
+        binding.btnSearch.setOnClickListener(this);
 
     }
 
@@ -137,7 +124,7 @@ public class DiscoverActivity extends AppCompatActivity implements ImageAdapterE
 
     @Override
     public void onItemImageClick(int position) {
-        Log.e("longhbs","id :"+images.get(position).getId());
+        Log.e("longhbs", "id :" + images.get(position).getId());
         Intent intent = new Intent(DiscoverActivity.this, ImageDetailActivity.class);
         intent.putExtra(Const.KEY_INTENT_LIST_IMAGE, (Serializable) images);
         intent.putExtra(Const.KEY_INTENT_LIST_IMAGE_POS, position);
@@ -155,11 +142,11 @@ public class DiscoverActivity extends AppCompatActivity implements ImageAdapterE
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_search:
+            case R.id.btnSearch:
                 if (isShowSearch) {
-                    tvTitle.setVisibility(View.VISIBLE);
-                    group.setVisibility(View.GONE);
-                    String txtInput = edtSearch.getText().toString();
+                    binding.textView6.setVisibility(View.VISIBLE);
+                    binding.group.setVisibility(View.GONE);
+                    String txtInput = binding.edtSearch.getText().toString();
                     if (txtInput != null && !txtInput.trim().equals("") && !txtInput.equals(text)) {
                         text = txtInput;
                         page = 1;
@@ -173,13 +160,13 @@ public class DiscoverActivity extends AppCompatActivity implements ImageAdapterE
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 } else {
-                    tvTitle.setVisibility(View.GONE);
-                    group.setVisibility(View.VISIBLE);
+                    binding.textView6.setVisibility(View.GONE);
+                    binding.group.setVisibility(View.VISIBLE);
                 }
                 isShowSearch = !isShowSearch;
                 break;
-            case R.id.btn_clear_text:
-                edtSearch.setText("");
+            case R.id.btnClearText:
+                binding.edtSearch.setText("");
                 break;
         }
     }

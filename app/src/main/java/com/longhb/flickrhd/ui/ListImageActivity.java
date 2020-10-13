@@ -2,9 +2,7 @@ package com.longhb.flickrhd.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.TaskStackBuilder;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -17,11 +15,11 @@ import android.widget.TextView;
 
 import com.longhb.flickrhd.R;
 import com.longhb.flickrhd.adpater.ImageAdapter;
+import com.longhb.flickrhd.databinding.ActivityListImageBinding;
 import com.longhb.flickrhd.model.Image;
 import com.longhb.flickrhd.util.Const;
 import com.longhb.flickrhd.util.EndlessRecyclerViewScrollListener;
 import com.longhb.flickrhd.util.ImageAdapterEvent;
-import com.longhb.flickrhd.util.OnSwipeTouchListener;
 import com.longhb.flickrhd.viewmodel.ListImageActivityViewModel;
 import com.longhb.flickrhd.viewmodel.MyViewModelFactory;
 
@@ -31,11 +29,8 @@ import java.util.Collection;
 import java.util.List;
 
 public class ListImageActivity extends AppCompatActivity implements ImageAdapterEvent {
-    private RecyclerView recyclerView2;
-    private ImageButton btnBack;
-    private TextView tvTitle;
 
-
+    private ActivityListImageBinding binding;
     private List<Image> images;
     private ImageAdapter adapter;
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
@@ -52,7 +47,8 @@ public class ListImageActivity extends AppCompatActivity implements ImageAdapter
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_image);
+        binding=ActivityListImageBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         initView();
 
@@ -78,14 +74,14 @@ public class ListImageActivity extends AppCompatActivity implements ImageAdapter
     }
 
     private void settingRecyclerView() {
-        recyclerView2.setAdapter(adapter);
-        recyclerView2.setLayoutManager(staggeredGridLayoutManager);
+        binding.recyclerView.setAdapter(adapter);
+        binding.recyclerView.setLayoutManager(staggeredGridLayoutManager);
 
         addLoadMore();
     }
 
     private void addLoadMore() {
-        recyclerView2.addOnScrollListener(new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
+        binding.recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
             @Override
             public void onLoadMore(int p, int totalItemsCount, RecyclerView view) {
                 isLodeMore = true;
@@ -113,12 +109,8 @@ public class ListImageActivity extends AppCompatActivity implements ImageAdapter
     }
 
     private void initView() {
-        recyclerView2 = (RecyclerView) findViewById(R.id.recyclerView2);
-        btnBack = findViewById(R.id.btn_back);
-        tvTitle = findViewById(R.id.tv_title);
-
-        tvTitle.setText(getIntent().getStringExtra("title"));
-        btnBack.setOnClickListener(view -> onBackPressed());
+        binding.tvTitle.setText(getIntent().getStringExtra("title"));
+        binding.btnBack.setOnClickListener(view -> onBackPressed());
     }
 
     @Override

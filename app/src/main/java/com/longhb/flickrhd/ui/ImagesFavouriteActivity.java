@@ -2,13 +2,10 @@ package com.longhb.flickrhd.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,12 +13,12 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.longhb.flickrhd.R;
 import com.longhb.flickrhd.adpater.ImageAdapter;
+import com.longhb.flickrhd.databinding.ActivityImagesFavouriteBinding;
 import com.longhb.flickrhd.model.Image;
 import com.longhb.flickrhd.util.Const;
 import com.longhb.flickrhd.util.EndlessRecyclerViewScrollListener;
 import com.longhb.flickrhd.util.ImageAdapterEvent;
 import com.longhb.flickrhd.viewmodel.ImagesFavouriteViewModel;
-import com.longhb.flickrhd.viewmodel.ListImageActivityViewModel;
 import com.longhb.flickrhd.viewmodel.MyViewModelFactory;
 
 import java.io.Serializable;
@@ -30,11 +27,9 @@ import java.util.Collection;
 import java.util.List;
 
 public class ImagesFavouriteActivity extends AppCompatActivity implements ImageAdapterEvent {
-    private RecyclerView recyclerView2;
-    private ImageButton btnBack;
+    private ActivityImagesFavouriteBinding binding;
 
     private ImagesFavouriteViewModel viewModel;
-
     private List<Image> images;
     private ImageAdapter adapter;
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
@@ -43,7 +38,8 @@ public class ImagesFavouriteActivity extends AppCompatActivity implements ImageA
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_images_favourite);
+        binding = ActivityImagesFavouriteBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         initView();
 
@@ -71,7 +67,7 @@ public class ImagesFavouriteActivity extends AppCompatActivity implements ImageA
             }
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
-        itemTouchHelper.attachToRecyclerView(recyclerView2);
+        itemTouchHelper.attachToRecyclerView(binding.recyclerView);
     }
 
     private void changeData(Bundle savedInstanceState) {
@@ -83,14 +79,14 @@ public class ImagesFavouriteActivity extends AppCompatActivity implements ImageA
     }
 
     private void settingRecyclerView() {
-        recyclerView2.setAdapter(adapter);
-        recyclerView2.setLayoutManager(staggeredGridLayoutManager);
+        binding.recyclerView.setAdapter(adapter);
+        binding.recyclerView.setLayoutManager(staggeredGridLayoutManager);
 
         addLoadMore();
     }
 
     private void addLoadMore() {
-        recyclerView2.addOnScrollListener(new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
+        binding.recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
             @Override
             public void onLoadMore(int p, int totalItemsCount, RecyclerView view) {
             }
@@ -108,9 +104,7 @@ public class ImagesFavouriteActivity extends AppCompatActivity implements ImageA
     }
 
     private void initView() {
-        recyclerView2 = (RecyclerView) findViewById(R.id.recyclerView2);
-        btnBack = findViewById(R.id.btn_back);
-        btnBack.setOnClickListener(view -> onBackPressed());
+        binding.btnBack.setOnClickListener(view -> onBackPressed());
     }
 
     @Override

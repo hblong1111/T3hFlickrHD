@@ -1,13 +1,7 @@
 package com.longhb.flickrhd.adpater;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.LinearGradient;
-import android.graphics.Shader;
-import android.text.BoringLayout;
 import android.text.Html;
-import android.text.TextPaint;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -148,7 +142,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imgAvt = (ImageView) itemView.findViewById(R.id.img_avt);
-            tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
+            tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
             cardSelect = itemView.findViewById(R.id.cardView);
             cardSelect1 = itemView.findViewById(R.id.card_select);
 
