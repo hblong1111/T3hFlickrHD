@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.Notification;
 import android.app.WallpaperManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -20,25 +19,14 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.text.Html;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
-import android.widget.RemoteViews;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.longhb.flickrhd.App;
+import com.longhb.flickrhd.FlickerApplication;
 import com.longhb.flickrhd.R;
 import com.longhb.flickrhd.adpater.CommentAdapter;
 import com.longhb.flickrhd.adpater.ImageDetailAdapterViewPager;
@@ -57,7 +45,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -260,7 +247,7 @@ public class ImageDetailActivity extends AppCompatActivity implements View.OnCli
         protected void onPreExecute() {
             super.onPreExecute();
             notificationManager = NotificationManagerCompat.from(getApplicationContext());
-            builder = new NotificationCompat.Builder(getApplicationContext(), App.CHANNEL_ID);
+            builder = new NotificationCompat.Builder(getApplicationContext(), FlickerApplication.CHANNEL_ID);
             builder.setContentTitle("Chuẩn bị ...")
                     .setContentText("Đang chờ")
                     .setSmallIcon(R.drawable.ic_download)
