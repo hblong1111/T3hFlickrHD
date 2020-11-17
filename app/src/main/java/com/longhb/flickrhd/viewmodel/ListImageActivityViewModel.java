@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.longhb.flickrhd.model.Image;
-import com.longhb.flickrhd.network.GetImage;
+import com.longhb.flickrhd.model.GetImage;
 import com.longhb.flickrhd.repository.ImageRepository;
 
 import java.util.ArrayList;

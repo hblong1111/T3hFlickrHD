@@ -2,9 +2,7 @@ package com.longhb.flickrhd.viewmodel;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -19,8 +17,7 @@ import androidx.lifecycle.ViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.longhb.flickrhd.R;
 import com.longhb.flickrhd.model.Category;
-import com.longhb.flickrhd.model.Image;
-import com.longhb.flickrhd.network.GetImage;
+import com.longhb.flickrhd.model.GetImage;
 import com.longhb.flickrhd.repository.ImageRepository;
 import com.longhb.flickrhd.ui.ImagesFavouriteActivity;
 

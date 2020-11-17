@@ -118,7 +118,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         return textHtml;
     }
 
-
+    
     @Override
     public int getItemCount() {
         return list.size();

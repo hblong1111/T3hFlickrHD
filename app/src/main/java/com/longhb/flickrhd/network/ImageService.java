@@ -1,6 +1,8 @@
 package com.longhb.flickrhd.network;
 
-import io.reactivex.rxjava3.core.Observable;
+import com.longhb.flickrhd.model.GetComment;
+import com.longhb.flickrhd.model.GetImage;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

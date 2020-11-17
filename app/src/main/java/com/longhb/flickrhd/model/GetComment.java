@@ -1,4 +1,4 @@
-package com.longhb.flickrhd.network;
+package com.longhb.flickrhd.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

@@ -1,4 +1,4 @@
-package com.longhb.flickrhd.network;
+package com.longhb.flickrhd.model;
 
 import android.util.Log;
 

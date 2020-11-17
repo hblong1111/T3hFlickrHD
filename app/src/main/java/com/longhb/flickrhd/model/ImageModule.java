@@ -1,5 +1,6 @@
-package com.longhb.flickrhd.network;
+package com.longhb.flickrhd.model;
 
+import com.longhb.flickrhd.network.ImageService;
 import com.longhb.flickrhd.util.Const;
 
 public class ImageModule {

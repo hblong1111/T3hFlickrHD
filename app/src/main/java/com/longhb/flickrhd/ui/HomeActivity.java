@@ -1,23 +1,19 @@
 package com.longhb.flickrhd.ui;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.longhb.flickrhd.BaseActivity;
 import com.longhb.flickrhd.R;
 import com.longhb.flickrhd.adpater.CategoryAdapter;
 import com.longhb.flickrhd.databinding.ActivityMainBinding;
 import com.longhb.flickrhd.model.Category;
-import com.longhb.flickrhd.network.GetImage;
+import com.longhb.flickrhd.model.GetImage;
 import com.longhb.flickrhd.util.CategoryAdapterEvent;
 import com.longhb.flickrhd.util.Const;
 import com.longhb.flickrhd.util.OnSwipeTouchListener;

@@ -8,15 +8,13 @@ import androidx.lifecycle.ViewModel;
 
 import com.longhb.flickrhd.model.Comment;
 import com.longhb.flickrhd.model.Image;
-import com.longhb.flickrhd.network.GetComment;
+import com.longhb.flickrhd.model.GetComment;
 import com.longhb.flickrhd.repository.ImageRepository;
 import com.longhb.flickrhd.util.Const;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -26,7 +24,7 @@ public class DetailViewModel extends ViewModel {
     private ImageRepository repository;
     private MutableLiveData<List<Image>> mListImage = new MutableLiveData<>();
     private MutableLiveData<Integer> curPage = new MutableLiveData<>();
-    private MutableLiveData<List<Comment>> comments = new MutableLiveData<List<Comment>>();
+    private MutableLiveData<List<Comment>> comments = new MutableLiveData<>();
 
     public DetailViewModel(Application application, Activity activity) {
         repository = new ImageRepository(application);

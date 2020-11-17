@@ -1,4 +1,4 @@
-package com.longhb.flickrhd.network;
+package com.longhb.flickrhd.model;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

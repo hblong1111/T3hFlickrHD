@@ -3,22 +3,20 @@ package com.longhb.flickrhd.repository;
 import android.app.Application;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.longhb.flickrhd.db.CategoryDao;
 import com.longhb.flickrhd.db.ImageDao;
 import com.longhb.flickrhd.db.ImageDatabase;
 import com.longhb.flickrhd.model.Category;
 import com.longhb.flickrhd.model.Image;
-import com.longhb.flickrhd.network.GetComment;
-import com.longhb.flickrhd.network.GetImage;
-import com.longhb.flickrhd.network.ImageModule;
+import com.longhb.flickrhd.model.GetComment;
+import com.longhb.flickrhd.model.GetImage;
+import com.longhb.flickrhd.model.ImageModule;
 import com.longhb.flickrhd.network.ImageService;
 import com.longhb.flickrhd.util.Const;
 
 import java.util.List;
 
-import io.reactivex.rxjava3.core.Observable;
 import retrofit2.Call;
 
 public class ImageRepository {
